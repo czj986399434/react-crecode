@@ -111,19 +111,19 @@ $blue:#409EFF;
         cursor: pointer;
     }
     .left-button{
-        background: url('/arrow-left.png') no-repeat center center;
+        background: url('../../public/arrow-left.png') no-repeat center center;
         background-size: 30px 30px
     }
     .left-button:hover{
-        background: url('/arrow-left-selected.png')no-repeat center center;
+        background: url('../../public/arrow-left-selected.png')no-repeat center center;
         background-size: 30px 30px
     }
     .right-button{
-        background: url('/arrow-right.png') no-repeat center center;
+        background: url('../../public/arrow-right.png') no-repeat center center;
         background-size: 30px 30px
     }
     .right-button:hover{
-        background: url('/arrow-right-selected.png')no-repeat center center;
+        background: url('../../public/arrow-right-selected.png')no-repeat center center;
         background-size: 30px 30px
     }
     .item-selected{

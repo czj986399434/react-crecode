@@ -1,6 +1,23 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import '../src/styles/adapt.scss'
+import '../src/styles/layout.scss'
+import '../src/styles/adapt.scss'
+import '../src/styles/header.scss'
+import '../src/styles/index.scss'
+import '../src/styles/pictures.scss'
+import '../src/styles/pictures-basic.scss'
+import '../src/styles/preview-window.scss'
+import '../src/styles/diary.scss'
+import '../src/styles/space.scss'
+import '../src/styles/blog.scss'
+import '../src/styles/space-blog.scss'
+import '../src/styles/article.scss'
+import '../src/styles/creative-workshop.scss'
+import '../src/styles/create.scss'
+import '../src/styles/edit.scss'
+import 'antd/dist/antd.css'
 import { createContext, useReducer, useEffect } from 'react'
 import { reducer, defaultState } from './store/reducer/index'
 import {BrowserRouter,Route} from 'react-router-dom'
