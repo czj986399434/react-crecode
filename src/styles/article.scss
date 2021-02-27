@@ -1,0 +1,166 @@
+$blue:#409EFF;
+.article{
+        box-sizing: border-box;
+        padding:20px;
+        display: flex;
+        align-items: center;
+       .article-container{
+        background: #fff;
+        width: 100%;
+        flex:1;
+        padding: 20px 30px 25px 30px;
+        position: relative;
+       }
+        .content-container::after{
+            content:'';
+            display: block;
+            clear: both;
+        }
+    .icon {
+        height: 20px;
+    }
+    .tags {
+        height: 20px;
+        display: inline-block;
+    }
+
+    .inner {
+        width: 90%;
+        margin: 0 auto;
+        display: inline-block;
+    }
+
+    .art-header {
+        color: #212220;
+        height: 40px;
+        line-height: 40px;
+        border-bottom: 1px solid #e8e9e7;
+        font-weight: 400;
+        display: flex;
+        justify-content: flex-start;
+    }
+    &>p{
+        font-size: 18px;
+        margin:0;
+    }
+    .header-item{
+        margin-right:20px
+    }
+    .header-item>span:first-of-type{
+        color: #787977;
+        padding:10px 10px 0 0;
+    }
+    .blue{
+        color:$blue
+    }
+    .bold{
+        font-weight: bold;
+    }
+    .date {
+        font-family: SourceCodeProRegular, Menlo, Monaco, Consolas, "Courier New", monospace, 'Helvetica Neue', Arial, sans-serif;
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        padding: 0 20px 5px 20px;
+        background:#fff
+    }
+    .day{
+        text-align: center;
+    font-weight: 700;
+    font-size: 30px;
+    color: #6bc30d;
+    position: relative;
+    top: 2px;
+    }
+    .month{
+        color: #989997;
+    }
+    .year{
+        font-size: 18px;
+        margin-left: 10px;
+        color: #989997;
+    }
+    .content-image{
+        display: block;
+    width: 300px;
+    height: 180px;
+    border: 1px solid #e8e9e7;
+    overflow: hidden;
+    float: left;
+    margin-right: 20px;
+    }
+    .content-container{
+        padding:20px 0;
+        border-bottom: 1px solid #e8e9e7;
+    }
+    .read-more{
+        clear: both;
+        height:40px;
+        line-height: 40px;
+        position: relative;
+        
+    }
+    .comment-form{
+        margin: 20px auto 0;
+        width:95%;
+        background:#FAFBFC;
+        height:50px;
+        display: flex;
+        align-items: center;
+        box-sizing: border-box;
+        padding: 0 10px;
+    }
+    .comment-form>img{
+        margin-right:20px
+    }
+    .avator{
+        height:40px;
+        width:40px;
+        background: #409EFF;
+        border-radius: 50%;
+        border:0px;
+    }
+
+    .comments{
+        
+        max-width: 500px;
+        width:80%;
+        margin:10px auto;
+        display: flex;
+        align-items: center;
+    }
+    .comments-container{
+        flex:1;
+        position: relative;
+        .content{
+            background: #F5F5F5;
+            font-family: 'Microsoft YaHei';
+            padding:5px ;
+            color:#7B7AAB;
+            font-size: 15px;
+        }
+     }
+    .comments>img{
+        
+        margin-right:10px;
+    }
+    .nickname{
+        font-family: 'Microsoft YaHei';
+        font-weight: bold;
+
+    }
+    .time{
+        float:right;
+        color:#696969
+    }
+    
+    .floor{
+        position: absolute;
+        right:3px;
+        top:0;
+        transform: translate(0,100%);
+    }
+    .input-empty{
+        margin-right:10px;
+    }
+}

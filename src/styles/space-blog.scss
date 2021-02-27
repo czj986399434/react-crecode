@@ -1,0 +1,127 @@
+$grey:#909090;
+$blue:#409EFF;
+
+.space-blog {
+    background: url('/background.jpg') no-repeat;
+    background-size: cover;
+    display: flex;
+    align-items: center;
+
+    .article-item {
+        background: #fff;
+        width: 100%;
+        margin: 20px 0;
+        padding: 20px 30px 25px 30px;
+        position: relative;
+    }
+
+    .icon {
+        height: 20px;
+    }
+    .tags {
+        height: 20px;
+        display: inline-block;
+    }
+
+    .inner {
+        width: 90%;
+        margin: 0 auto;
+        display: inline-block;
+    }
+
+    .title {
+        color: #212220;
+        height: 40px;
+        line-height: 40px;
+        font-size: 18px;
+        border-bottom: 1px solid #e8e9e7;
+        font-weight: 400;
+
+    }
+
+    .title>span:hover {
+        color: $blue;
+        cursor: pointer;
+    }
+
+    .date {
+        font-family: SourceCodeProRegular, Menlo, Monaco, Consolas, "Courier New", monospace, 'Helvetica Neue', Arial, sans-serif;
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        padding: 0 20px 5px 20px;
+        background:#fff
+    }
+    .day{
+        text-align: center;
+    font-weight: 700;
+    font-size: 30px;
+    color: #6bc30d;
+    position: relative;
+    top: 2px;
+    }
+    .month{
+        color: #989997;
+    }
+    .year{
+        font-size: 18px;
+        margin-left: 10px;
+        color: #989997;
+    }
+    .content-image{
+        display: block;
+    width: 300px;
+    height: 180px;
+    border: 1px solid #e8e9e7;
+    overflow: hidden;
+    float: left;
+    margin-right: 20px;
+    }
+    .content-container{
+        padding:20px 0;
+    }
+    .read-more{
+        clear: both;
+        height:40px;
+        line-height: 40px;
+        position: relative;
+        
+    }
+    .read-more>a{
+        color: #383937;
+        font-weight: 600;
+        background:#fff;
+        display: inline-block;
+        position: absolute;
+        padding:0 10px 0 0;
+    }
+    .read-more>a:hover{
+        color: $blue;
+    }
+     .read-more::before{
+        position: absolute;
+        content: '';
+        width:100%;
+        height:1px;
+        top: 20px;
+        background-color: #d0d0d0;
+     }
+     .tag{
+        display: inline-block;
+        font-size: 12px;
+        padding: 2px 5px;
+        background-color: #f1f2f0;
+        color: #787977;
+        margin: 2px;
+        text-decoration: none;
+        -webkit-transition: all .2s;
+        transition: all .2s;
+     }
+     .tag:hover{
+         background:#6bc30d
+     }
+     .float-right{
+         float:right;
+     }
+     
+}

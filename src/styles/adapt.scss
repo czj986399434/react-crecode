@@ -1,0 +1,17 @@
+@media (max-width: 1000px){
+    html{
+       
+    }
+    .header{
+        .motto{
+            display: none;
+        }
+    }    
+}
+@media (max-width:700px){
+    .index{
+        .sider{
+           display: none;
+        }
+    }
+}

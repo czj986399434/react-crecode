@@ -1,0 +1,9 @@
+.edit{
+    margin:0 10px;
+    &>p{
+        cursor: pointer;
+    }
+  &>p:hover{
+     color:#64B5F6
+  }
+}

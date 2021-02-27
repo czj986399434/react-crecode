@@ -1,0 +1,17 @@
+.layout {
+    background: #F4F5F5;
+    header{
+        position:sticky;
+        top:0;
+        z-index: 11;
+    }
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-family: -apple-system, system-ui, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont, "Helvetica Neue", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", Arial;
+}

@@ -1,0 +1,26 @@
+.create{
+    .cards{
+        display: flex;
+        justify-content: space-around;
+    }
+    .card{
+    display: inline-flex;
+    width: 30%;
+    flex-direction: column;
+    justify-content:space-between;
+    margin-right:10px;
+    position: relative;
+    }
+    .show{
+        min-height: 50px;
+        background: #fff;
+    }
+    .text-area{
+        flex:1;
+    }
+    .run-js{
+        position: absolute;
+        right:0;
+        bottom:0;
+    }
+}
