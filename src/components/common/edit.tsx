@@ -1,10 +1,10 @@
 import { Popover,Modal } from 'antd'
 import { SettingOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
-import { ThemeContext } from '../../pages/_app'
+import { DefalutContext } from '../../App'
 import { useState, useEffect, useContext } from 'react'
 const Edit = (props:any) => {
     const { user_id } = props
-    const { dispatch, defaultState: { loginUser } } = useContext(ThemeContext) as any;
+    const { dispatch, defaultState: { loginUser } } = useContext(DefalutContext) as any;
     const [show, setShow] = useState(true)
     // const [deleteVisible,setDeleteVisible]=useState(false)
     // const [deleteLoading,setDeleteLoading]=useState(false) 

@@ -19,7 +19,7 @@ import {initial} from "../store/action/index.ts"
 import {createContext, useReducer,useEffect} from 'react'
 import   {reducer,defaultState}     from '../store/reducer/index.ts'
 
-export const ThemeContext=createContext(null);
+export const DefalutContext=createContext(null);
 function MyApp({ Component, pageProps }) {
           const [state,dispatch]=useReducer(reducer,
                 defaultState,
@@ -33,8 +33,8 @@ function MyApp({ Component, pageProps }) {
             localStorage.setItem('local', JSON.stringify(state));
             console.log(localStorage.getItem('local'))
           }, [state]);
-  return  <ThemeContext.Provider value={{defaultState:state,dispatch:dispatch}}>
+  return  <DefalutContext.Provider value={{defaultState:state,dispatch:dispatch}}>
   <Component {...pageProps} />
-             </ThemeContext.Provider>
+             </DefalutContext.Provider>
 }
 export default MyApp

@@ -3,7 +3,7 @@ import Layout from '../../components/layout'
 import Diary from '../../components/diary'
 import Picture from '../../components/picture-basic'
 import { useEffect, useState, useContext } from 'react'
-import { ThemeContext } from '../_app'
+import { DefalutContext } from '../../App'
 import {Select} from 'antd'
 import SpaceBlog from '../../components/space-blog'
 type DisplayType = 'blog' | 'diary' | 'picture'
@@ -20,7 +20,7 @@ const Space = (props: any) => {
     picture_count: 111
   }
   
-  const { defaultState: { loginUser }, dispatch } = useContext(ThemeContext) as any;
+  const { defaultState: { loginUser }, dispatch } = useContext(DefalutContext) as any;
   const [displayType, setDisplayType] = useState<DisplayType>('blog');
   const [pictureDisplay,setPictureDisplay]=useState('basic')
   const self = (loginUser.user_id === spaceUser.user_id);

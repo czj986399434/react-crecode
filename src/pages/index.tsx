@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from 'react'
 import Layout from '../components/layout'
-import {ThemeContext} from './_app'
+import {DefalutContext} from '../App'
 import {requestUser,receiveUser} from '../store/action/index'
 type NavType = 'hot' | 'new'
 interface ContentItem{
@@ -16,7 +16,7 @@ interface ContentItem{
 const IndexPage = () => {
   const [navType, setNavType] = useState<NavType>('hot')
   const [contentList, setContentList] = useState<Array<ContentItem>>([])
-  const testContext =useContext(ThemeContext) as any
+  const testContext =useContext(DefalutContext) as any
   const {defaultState}=testContext;
   const {loginUser}=defaultState
   useEffect(() => {

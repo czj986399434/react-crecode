@@ -1,7 +1,7 @@
 import { useContext } from "react"
-import { ThemeContext } from "../pages/_app"
+import { DefalutContext } from "../App"
 
 export const useGlobal= ()=>{
-    const { dispatch, defaultState}= useContext(ThemeContext) as any;
+    const { dispatch, defaultState}= useContext(DefalutContext) as any;
     return [dispatch,defaultState]
 } 

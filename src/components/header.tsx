@@ -1,5 +1,5 @@
 import { labelRouters } from '../constants/header'
-import { ThemeContext } from '../pages/_app'
+import { DefalutContext } from '../App'
 import { useState, useEffect, useMemo, useContext } from 'react'
 import { changeRouter, receiveUser, requestUser } from '../store/action/index'
 import { useAdapt } from '../utils/adapthooks'
@@ -9,7 +9,7 @@ import axios from 'axios'
 const Header = (props: any) => {
 
   const [bodyWidth] = useAdapt()
-  const { dispatch, defaultState } = useContext(ThemeContext) as any;
+  const { dispatch, defaultState } = useContext(DefalutContext) as any;
   const { router_index, loginUser, isLogin } = defaultState
   const [idx, setIdx] = useState<number>(-1)
   // const router = useRouter()
