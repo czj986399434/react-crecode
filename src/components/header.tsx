@@ -6,6 +6,7 @@ import { useAdapt } from '../utils/adapthooks'
 import { Dropdown, Menu } from 'antd'
 import '../mock/login'
 import axios from 'axios'
+import { Link } from 'react-router-dom'
 const Header = (props: any) => {
 
   const [bodyWidth] = useAdapt()
@@ -23,7 +24,6 @@ const Header = (props: any) => {
   }
   const link = (index: number) => {
     dispatch(changeRouter(index))
-    // router.push(labelRouters[index].value)
   }
   const tologin = () => {
     dispatch(requestUser())
@@ -61,8 +61,9 @@ const Header = (props: any) => {
           <span className='motto'>青春是一个短暂的美梦, 当你醒来时, 它早已消失无踪</span>
           <div className='labels'>
             {labelRouters.map((router, index) => (
+              <Link to={router.value}  key={router.name}>
               <div className={router_index === index ? 'label label-highlight' : 'label'}
-                key={router.name}
+               
                 onClick={() => {
                   console.log('index' + index)
                   link(index)
@@ -74,7 +75,7 @@ const Header = (props: any) => {
                 }}>{router.name}
                 <div className='box-highlight' style={{ width: idx === index ? '7rem' : '0' }}></div>
               </div>
-
+              </Link>
             )
             )}
           </div>

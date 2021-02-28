@@ -18,53 +18,27 @@ import '../src/styles/edit.scss'
 import 'antd/dist/antd.css'
 import { createContext, useReducer, useEffect } from 'react'
 import { reducer, defaultState } from './store/reducer/index'
-import {BrowserRouter,Route} from 'react-router-dom'
-import {routes} from '../src/router-config/index'
-export const DefalutContext=createContext<any>(null);
+import { BrowserRouter, Route } from 'react-router-dom'
+import routes from './router-config/index'
+import { renderRoutes } from 'react-router-config'
+export const DefalutContext = createContext<any>(null);
 const storageKey = 'REACT_STATE'
 function App() {
   const [state, dispatch] = useReducer(reducer,
     defaultState,
     (initial) => JSON.parse(localStorage.getItem(storageKey) as string) || initial
   )
-  useEffect(()=>{
+  useEffect(() => {
     localStorage.setItem(storageKey, JSON.stringify(state));
-  },[storageKey,state])
+  }, [storageKey, state])
+  console.log(routes)
   return (
-    <DefalutContext.Provider value={{defaultState:state,dispatch}}>
-    <div className="App">
-     <BrowserRouter>
-     {
-                routes.map((router,index)=>{
-                    
-                        if(router.exact){
-                            
-                            return <Route exact key={index} path={router.path}
-                                render = {
-                                    props =>(
-                                      //@ts-ignore
-                                        <router.component {...props} routes = {router.routes}/>
-                                    )
-                                }
-                            />
-                            
-                        }else{
-                            
-                            return <Route key={index} path={router.path}
-                                render = {
-                                    props =>(
-                                      //@ts-ignore
-                                        <router.component {...props} routes = {router.routes} />
-                                    )
-                                }
-                            />
-                            
-                        }
-                    
-                })
-            }
-     </BrowserRouter>
-    </div>
+    <DefalutContext.Provider value={{ defaultState: state, dispatch }}>
+      <BrowserRouter>
+        {routes.map(route => {
+          return <Route {...route} ></Route>
+        })}
+      </BrowserRouter>
     </DefalutContext.Provider>
   );
 }
