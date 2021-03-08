@@ -1,14 +1,14 @@
-import React, { ReactNode } from 'react'
-import Header from './header'
+import React, { ReactNode } from "react";
+import Header from "./header";
 type Props = {
-  children?: ReactNode
-  title?: string
-}
+  children?: ReactNode;
+  title?: string;
+};
 
-const Layout = ({ children, title = 'crecode' }: Props) => (
-  <div className='layout'>
+const Layout = ({ children, title = "crecode" }: Props) => (
+  <div className="layout">
     <header>
-    <Header></Header>
+      <Header></Header>
     </header>
     {children}
     <footer>
@@ -16,6 +16,6 @@ const Layout = ({ children, title = 'crecode' }: Props) => (
       <span>I'm here to stay (Footer)</span>
     </footer>
   </div>
-)
+);
 
-export default Layout
+export default Layout;

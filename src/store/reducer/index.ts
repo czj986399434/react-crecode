@@ -1,5 +1,6 @@
+import { type } from "node:os";
 import * as types from "../types/index";
-const storageKey='local'
+const storageKey = "local";
 export const reducer = (state: any, action: any) => {
   switch (action.type) {
     //开始请求登录
@@ -15,7 +16,7 @@ export const reducer = (state: any, action: any) => {
         ...state,
         loginUser: action.loginUser,
         isFetching: false,
-        isLogin:true
+        isLogin: true,
       };
       break;
     //开始请求登出
@@ -37,22 +38,35 @@ export const reducer = (state: any, action: any) => {
         ...state,
         router_index: action.router_index,
       };
-      case types.INITIAL:
-        return {
-          ...state,
-          ...(localStorage.getItem(storageKey)?JSON.parse(localStorage.getItem(storageKey) as string):{})
-        }
+    case types.INITIAL:
+      return {
+        ...state,
+        ...(localStorage.getItem(storageKey)
+          ? JSON.parse(localStorage.getItem(storageKey) as string)
+          : {}),
+      };
+    case types.LOADING_START:
+      return {
+        ...state,
+        loading: true,
+      };
+    case types.LOADING_END:
+      return {
+        ...state,
+        loading: false,
+      };
     default:
       return state;
   }
 };
-export interface DefaultState{
-  isFetching:boolean;
-  loginUser:object;
-  isLogin:boolean;
-  router_index:number
+export interface DefaultState {
+  isFetching: boolean;
+  loginUser: object;
+  isLogin: boolean;
+  router_index: number;
+  loading: boolean;
 }
-export const defaultState:DefaultState = {
+export const defaultState: DefaultState = {
   isFetching: false,
   loginUser: {
     user_id: 1,
@@ -60,9 +74,10 @@ export const defaultState:DefaultState = {
     blog_count: 15,
     diary_count: 10,
     type: "admin",
-    username:'czjczj',
-    nickname:'czjczj'
+    username: "czjczj",
+    nickname: "czjczj",
   },
-  isLogin:false,
+  isLogin: false,
   router_index: 0,
+  loading: false,
 };
