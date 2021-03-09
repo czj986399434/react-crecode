@@ -1,4 +1,5 @@
 import { LOADING_END, LOADING_START } from "./loading";
+import {SAVE_BLOG} from './save-blog'
 //登录登出
 const REQUEST_LOGIN = "REQUEST_LOGIN";
 const RECEIVE_LOGIN = "RECEIVE_LOGIN";
@@ -11,6 +12,7 @@ export {
   RECEIVE_LOGOUT,
   LOADING_END,
   LOADING_START,
+  SAVE_BLOG
 };
 //改变header的router
 export const CHANGEROUTER = "CHANGEROUTER";

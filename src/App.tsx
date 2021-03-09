@@ -31,12 +31,11 @@ function App() {
   useEffect(() => {
     localStorage.setItem(storageKey, JSON.stringify(state));
   }, [storageKey, state])
-  console.log(routes)
   return (
     <DefalutContext.Provider value={{ defaultState: state, dispatch }}>
       <BrowserRouter>
-        {routes.map(route => {
-          return <Route {...route} ></Route>
+        {routes.map((route,index) => {
+          return <Route {...route} key={index}></Route>
         })}
       </BrowserRouter>
     </DefalutContext.Provider>

@@ -30,7 +30,6 @@ const Header = (props: any) => {
       dispatch(receiveUser(data.data));
     });
   };
-  console.log("router_index" + router_index);
   const loginMenu = useMemo(
     () => (
       <Menu>

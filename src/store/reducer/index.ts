@@ -1,3 +1,4 @@
+import { saveBlog } from './../action/save-blog';
 import { type } from "node:os";
 import * as types from "../types/index";
 const storageKey = "local";
@@ -44,6 +45,7 @@ export const reducer = (state: any, action: any) => {
         ...(localStorage.getItem(storageKey)
           ? JSON.parse(localStorage.getItem(storageKey) as string)
           : {}),
+          loading:false
       };
     case types.LOADING_START:
       return {
@@ -55,6 +57,12 @@ export const reducer = (state: any, action: any) => {
         ...state,
         loading: false,
       };
+      case types.SAVE_BLOG:
+        console.log(action.blogData)
+        return {
+          ...state,
+          blogData:action.blogData
+        }
     default:
       return state;
   }
@@ -65,6 +73,11 @@ export interface DefaultState {
   isLogin: boolean;
   router_index: number;
   loading: boolean;
+  blogData:BlogData
+}
+export interface BlogData{
+  content:string;
+  title:string;
 }
 export const defaultState: DefaultState = {
   isFetching: false,
@@ -80,4 +93,8 @@ export const defaultState: DefaultState = {
   isLogin: false,
   router_index: 0,
   loading: false,
+  blogData:{
+    content:'',
+    title:''
+  }
 };
