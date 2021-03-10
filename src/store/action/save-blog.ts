@@ -4,4 +4,6 @@ export const saveBlog = (blogData:BlogData)=> ({
     type:types.SAVE_BLOG,
     blogData
 })
-
+export const initialBlog =()=>({
+    type:types.INITIAL_BLOG
+})

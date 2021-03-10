@@ -3,9 +3,9 @@ import * as types from '../types/index'
 export const requestUser = ()=> ({
     type:types.REQUEST_LOGIN,
 })
-export const receiveUser=(json:any)=>({
+export const receiveUser=(loginUser:any)=>({
     type:types.RECEIVE_LOGIN,
-    loginUser:json.loginUser
+    loginUser:loginUser
 })
 export const changeRouter=(index:number)=>({
     type:types.CHANGEROUTER,

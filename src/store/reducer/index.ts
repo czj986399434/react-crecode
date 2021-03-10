@@ -1,4 +1,4 @@
-import { saveBlog } from './../action/save-blog';
+import { saveBlog } from "./../action/save-blog";
 import { type } from "node:os";
 import * as types from "../types/index";
 const storageKey = "local";
@@ -15,18 +15,20 @@ export const reducer = (state: any, action: any) => {
     case types.RECEIVE_LOGIN:
       return {
         ...state,
-        loginUser: action.loginUser,
+        loginUser: {
+          ...action.loginUser,
+          blog_count: action.loginUser.blogs.length,
+          diary_count: action.loginUser.diarys.length,
+        },
         isFetching: false,
         isLogin: true,
       };
-      break;
     //开始请求登出
     case types.REQUEST_LOGOUT:
       return {
         ...state,
         isFetching: true,
       };
-      break;
     //请求成功登出
     case types.RECEIVE_LOGOUT:
       return {
@@ -45,7 +47,7 @@ export const reducer = (state: any, action: any) => {
         ...(localStorage.getItem(storageKey)
           ? JSON.parse(localStorage.getItem(storageKey) as string)
           : {}),
-          loading:false
+        loading: false,
       };
     case types.LOADING_START:
       return {
@@ -57,12 +59,20 @@ export const reducer = (state: any, action: any) => {
         ...state,
         loading: false,
       };
-      case types.SAVE_BLOG:
-        console.log(action.blogData)
-        return {
-          ...state,
-          blogData:action.blogData
-        }
+    case types.SAVE_BLOG:
+      console.log(action.blogData);
+      return {
+        ...state,
+        blogData: action.blogData,
+      };
+    case types.INITIAL_BLOG:
+      return {
+        ...state,
+        blogData: {
+          content: "",
+          title: "",
+        },
+      };
     default:
       return state;
   }
@@ -73,11 +83,11 @@ export interface DefaultState {
   isLogin: boolean;
   router_index: number;
   loading: boolean;
-  blogData:BlogData
+  blogData: BlogData;
 }
-export interface BlogData{
-  content:string;
-  title:string;
+export interface BlogData {
+  content: string;
+  title: string;
 }
 export const defaultState: DefaultState = {
   isFetching: false,
@@ -93,8 +103,8 @@ export const defaultState: DefaultState = {
   isLogin: false,
   router_index: 0,
   loading: false,
-  blogData:{
-    content:'',
-    title:''
-  }
+  blogData: {
+    content: "",
+    title: "",
+  },
 };

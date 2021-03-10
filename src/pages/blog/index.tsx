@@ -1,18 +1,23 @@
 import Layout from "../../components/layout";
-import React, { useState, useEffect, useContext, useRef } from "react";
+import React, {
+  useState,
+  useEffect,
+  useContext,
+  useRef,
+  useCallback,
+} from "react";
+import E from "wangeditor";
 import { draftContent } from "../../constants/blog";
-import Editor from "../../components/editor";
-import { Button, Input, message, Popover, Tooltip, Upload } from "antd";
+import { Button, Input, Popover, Tooltip } from "antd";
 import { tags } from "../../constants/tag";
-import { Axios } from "../../api";
+import { Axios, myHttp } from "../../api";
 import { DefalutContext } from "../../App";
-import { startLoading } from "../../store/action/loading";
+import { endLoading, startLoading } from "../../store/action/loading";
 import {
   FileImageOutlined,
-  SmileOutlined,
   SyncOutlined,
 } from "@ant-design/icons";
-import { saveBlog } from "../../store/action/save-blog";
+import { initialBlog, saveBlog } from "../../store/action/save-blog";
 
 const Submit = (props: any) => {
   const { chooseTags, changeTags } = props;
@@ -62,6 +67,7 @@ const Submit = (props: any) => {
     </div>
   );
 };
+let editor = null as any;
 const Blog = (props: any) => {
   const chooseTags = new Array(tags.length);
   const [draftBool, setDraftBool] = useState<boolean>(false);
@@ -79,52 +85,73 @@ const Blog = (props: any) => {
     const tags = chooseTags.filter((tag) => {
       return tag !== undefined;
     });
-    console.log({
-      title,
-      tags,
-      content,
-      user_id: loginUser.user_id,
-    });
     dispatch(startLoading());
-    Axios.post("", {
+   myHttp.post("/blog/add", {
       title,
       tags,
       content,
+      coverImage:'',
       user_id: loginUser.user_id,
-    });
+    }).then(data=>{
+      dispatch(endLoading())
+      dispatch(initialBlog())
+      setTimeout(()=>{
+         // eslint-disable-next-line no-restricted-globals
+         location.reload()
+      },1000)
+      setIsModalVisible(false)
+    })
   };
-  // useEffect(() => {
-  //   let timeoutTimer: NodeJS.Timeout
-  //  const interTimer= setInterval(() => {
-  //     setSaveIconFlag(true);
-  //     save()
-  //    timeoutTimer= setTimeout(() => {
-  //       setSaveIconFlag(false);
-  //       setDraftBool(true);
-  //     }, 500);
-  //   }, 1000 );
-  //   return ()=>{
-  //     clearInterval(interTimer)
-  //     timeoutTimer&&clearTimeout(timeoutTimer)
-  //   }
-  // }, []);
-  useEffect(() => {
-       if(props.blog_id){
-
-       }else{
-         console.log('blogData',blogData)
-           const {title,content} =blogData
-           setTitle(title)
-           setContent(content)
-       }
-  }, [props.blog_id]);
-  const save = () => {
+  const save = useCallback(() => {
     const saveData = {
       content,
       title,
     };
-    dispatch(saveBlog(saveData))
-  };
+    dispatch(saveBlog(saveData));
+  }, [content, title, dispatch]);
+  useEffect(() => {
+    // 注：class写法需要在componentDidMount 创建编辑器
+    editor = new E("#div1");
+
+    editor.config.onchange = (newHtml: string) => {
+      setContent(newHtml);
+    };
+    /**一定要创建 */
+    editor.create();
+
+    return () => {
+      // 组件销毁时销毁编辑器  注：class写法需要在componentWillUnmount中调用
+      editor.destroy();
+    };
+  }, []);
+  useEffect(() => {
+    let timeoutTimer: NodeJS.Timeout;
+    const interTimer = setInterval(() => {
+      setSaveIconFlag(true);
+      const saveData = {
+        content,
+        title,
+      };
+      dispatch(saveBlog(saveData));
+      timeoutTimer = setTimeout(() => {
+        setSaveIconFlag(false);
+        setDraftBool(true);
+      }, 500);
+    }, 1000*60);
+    return () => {
+      clearInterval(interTimer);
+      timeoutTimer && clearTimeout(timeoutTimer);
+    };
+  }, [content,title,dispatch]);
+  useEffect(() => {
+    if (props.blog_id) {
+    } else {
+      const { title, content } = blogData;
+      setTitle(title);
+      editor.txt.html(content)
+    }
+  }, [props.blog_id]);
+
   const uploadCover = () => {
     const file = fileRef.current.files[0];
     const reader = new FileReader();
@@ -218,11 +245,11 @@ const Blog = (props: any) => {
               </Popover>
             </div>
           </div>
-          <Editor
-            style={{ opacity: isModalVisible ? "0" : "1" }}
-            content={content}
-            setContent={setContent}
-          ></Editor>
+          <div
+            className="editor"
+          >
+            <div id="div1" className="wangeditor"></div>
+          </div>
         </div>
       </div>
     </Layout>

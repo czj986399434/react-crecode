@@ -5,9 +5,10 @@ import { changeRouter, receiveUser, requestUser } from "../store/action/index";
 import { useAdapt } from "../utils/adapthooks";
 import { Dropdown, Menu } from "antd";
 import "../mock/login";
-import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+import { Axios, myHttp } from "../api";
 const Header = (props: any) => {
+  const history =useHistory()
   const [bodyWidth] = useAdapt();
   const { dispatch, defaultState } = useContext(DefalutContext) as any;
   const { router_index, loginUser, isLogin } = defaultState;
@@ -26,8 +27,8 @@ const Header = (props: any) => {
   };
   const tologin = () => {
     dispatch(requestUser());
-    axios.get("/login").then((data) => {
-      dispatch(receiveUser(data.data));
+    myHttp.get(`/user/login?open_id=1`).then((data:any) => {
+      dispatch(receiveUser(data.result));
     });
   };
   const loginMenu = useMemo(
@@ -65,6 +66,11 @@ const Header = (props: any) => {
     ),
     []
   );
+  useEffect(()=>{
+    //路由跳转
+    history.push(labelRouters[defaultState.router_index].value)
+   
+  },[defaultState.router_index,history])
   return (
     <div className="main-header">
       {bodyWidth >= 800 ? (
@@ -118,7 +124,7 @@ const Header = (props: any) => {
               <Dropdown overlay={loginMenu}>
                 <img
                   className="qqLogin"
-                  src={loginUser.head_portrait}
+                  src={'/jay1.jpeg'||loginUser.head_portrait}
                   onClick={() => {
                     tologin();
                   }}

@@ -20,17 +20,17 @@ import { createContext, useReducer, useEffect } from 'react'
 import { reducer, defaultState } from './store/reducer/index'
 import { BrowserRouter, Route } from 'react-router-dom'
 import routes from './router-config/index'
-import { renderRoutes } from 'react-router-config'
+import { labelRouters } from './constants/header';
 export const DefalutContext = createContext<any>(null);
 const storageKey = 'REACT_STATE'
-function App() {
+function App(props:any) {
   const [state, dispatch] = useReducer(reducer,
     defaultState,
     (initial) => JSON.parse(localStorage.getItem(storageKey) as string) || initial
   )
   useEffect(() => {
     localStorage.setItem(storageKey, JSON.stringify(state));
-  }, [storageKey, state])
+  }, [state])
   return (
     <DefalutContext.Provider value={{ defaultState: state, dispatch }}>
       <BrowserRouter>

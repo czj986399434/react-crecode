@@ -1,1 +1,2 @@
 export const SAVE_BLOG='SAVE_BLOG'
+export const INITIAL_BLOG='INITIAL_BLOG'

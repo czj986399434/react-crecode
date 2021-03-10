@@ -19,6 +19,7 @@ const IndexPage = () => {
   const testContext =useContext(DefalutContext) as any
   const {defaultState}=testContext;
   const {loginUser}=defaultState
+  console.log(defaultState)
   useEffect(() => {
     const list:ContentItem[] = [{
       blog_id: 1,

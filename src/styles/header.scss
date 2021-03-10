@@ -63,7 +63,9 @@ $blue:#409EFF;
     .qqLogin {
         cursor: pointer;
         width: 50px;
-        image-rendering: crisp-edges;
+        height: 50px;
+        border-radius: 50%;
+        object-fit: cover;
         // position: absolute;
         // right:0px;
         // top:50%;

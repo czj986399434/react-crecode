@@ -51,10 +51,15 @@
     transition-delay: 1s;
     .w-e-toolbar {
       border: 0px !important;
+      z-index: 1 !important;
     }
     .w-e-text-container {
       width: 100%;
       border: 0px !important;
+      z-index: 0 !important;
+    }
+    .w-e-menu {
+      z-index:1  !important;
     }
   }
 }
