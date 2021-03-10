@@ -15,7 +15,15 @@ $blue:#409EFF;
    }
    .content-box{
        flex:1;
+    //    display: flex;
+    //    flex-direction: column;
+    //    align-items: center;
       
+   }
+   .ant-pagination{
+       margin-top:20px;
+       display: flex;
+       justify-content: center;
    }
    .content-header{
        display: flex;

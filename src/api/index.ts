@@ -1,13 +1,17 @@
 import { message } from "antd";
 import axios from "axios";
 export const Axios = axios.create({});
-const successCodeReg = /^20[0-9]/g;
+const successCodeReg = /(^20[0-9])|(^304)/g;
 // Axios.interceptors.request.use()
 Axios.interceptors.response.use(
   (response) => {
+    console.log(response.status.toString())
     if (successCodeReg.test(response.status.toString())) {
-      message.success("success");
+      response.data.message
+        ? message.success(response.data.message)
+        : message.success("success");
     } else {
+      
       message.error("error" + response.data.message);
     }
     return response;
@@ -18,7 +22,7 @@ Axios.interceptors.response.use(
 );
 export const myHttp = {
   get,
-  post
+  post,
 };
 
 /**
@@ -26,14 +30,13 @@ export const myHttp = {
  *
  * @param {string} url 请求url
  * @param {*} [params={}] 请求参数
- * @return {*} 
+ * @return {*}
  */
 function get(url: string, params = {}) {
   return new Promise((resolve, reject) => {
-    Axios
-      .get(url, {
-        params: params,
-      })
+    Axios.get(url, {
+      params: params,
+    })
       .then((response) => {
         resolve(response.data);
       })
@@ -47,9 +50,9 @@ function get(url: string, params = {}) {
  *
  * @param {string} url 请求url
  * @param {object} data  请求体
- * @return {*} 
+ * @return {*}
  */
-function post(url:string, data:object) {
+function post(url: string, data: object) {
   return new Promise((resolve, reject) => {
     Axios.post(url, data).then(
       (response) => {
