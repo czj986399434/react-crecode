@@ -1,0 +1,7 @@
+{
+  "host": "8.135.106.236",
+  "port": 22,
+  "localPath": "./build",
+  "remotePath": "/usr/local/nginx/crecode/front-end/",
+  "readyTimeout": 20000
+}

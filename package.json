@@ -84,7 +84,8 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "node scripts/test.js"
+    "test": "node scripts/test.js",
+    "deploy": "node scripts/build.js && deploy-app"
   },
   "eslintConfig": {
     "extends": [
@@ -108,6 +109,7 @@
     "@types/mockjs": "^1.0.3",
     "@types/react-router-config": "^5.0.2",
     "@types/react-router-dom": "^5.1.7",
+    "@weilinerl/deploy-helper": "^1.0.5",
     "mockjs": "^1.1.0",
     "node-sass": "^5.0.0"
   },
@@ -168,5 +170,5 @@
       "react-app"
     ]
   },
-  "proxy":"http://localhost:3001"
+  "proxy": "http://localhost:3001"
 }
