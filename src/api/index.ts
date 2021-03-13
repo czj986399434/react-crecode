@@ -1,18 +1,18 @@
 import { message } from "antd";
 import axios from "axios";
 export const Axios = axios.create({});
-const successCodeReg = /(^20[0-9])|(^304)/g;
+const successCodeReg = /^20/g;
 // Axios.interceptors.request.use()
 Axios.interceptors.response.use(
   (response) => {
     console.log(response.status.toString())
-    if (successCodeReg.test(response.status.toString())) {
+    if (successCodeReg.test(response.status.toString())||response.status.toString()==='304') {
       response.data.message
-        ? message.success(response.data.message)
-        : message.success("success");
+        ? console.log(response.data.message)
+        : console.log("success");
     } else {
       
-      message.error("error" + response.data.message);
+      console.log("error" + response.data.message);
     }
     return response;
   },

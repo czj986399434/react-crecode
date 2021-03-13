@@ -1,3 +1,4 @@
+import { GET_SELF_LIKES } from './like';
 import { LOADING_END, LOADING_START } from "./loading";
 import {SAVE_BLOG,INITIAL_BLOG} from './save-blog'
 //登录登出
@@ -13,7 +14,8 @@ export {
   LOADING_END,
   LOADING_START,
   SAVE_BLOG,
-  INITIAL_BLOG
+  INITIAL_BLOG,
+  GET_SELF_LIKES
 };
 //改变header的router
 export const CHANGEROUTER = "CHANGEROUTER";

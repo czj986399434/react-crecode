@@ -29,6 +29,16 @@ $blue:#409EFF;
        display: flex;
        padding :0 10px 20px;
        border-bottom: 1px solid #f1f1f1;
+       align-items: center;
+   }
+   .content-user{
+       cursor: pointer;
+   }
+   .content-user:hover{
+       color:$blue
+   }
+   .content-tags{
+       float: right;
    }
    .nav-item{
        cursor: pointer;
@@ -63,7 +73,11 @@ $blue:#409EFF;
     font-size:18px;
     font-weight: 600;
     line-height: 1.2;
+    cursor: pointer;
    }
+//    .title:hover{
+//        color:$blue
+//    }
    .icons{
        display: flex;
    }

@@ -66,11 +66,6 @@ const Header = (props: any) => {
     ),
     []
   );
-  useEffect(()=>{
-    //路由跳转
-    history.push(labelRouters[defaultState.router_index].value)
-   
-  },[defaultState.router_index,history])
   return (
     <div className="main-header">
       {bodyWidth >= 800 ? (

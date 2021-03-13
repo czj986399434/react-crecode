@@ -3,7 +3,19 @@ import Layout from "../components/layout";
 import { DefalutContext } from "../App";
 import { requestUser, receiveUser } from "../store/action/index";
 import { myHttp } from "../api";
-import { Pagination } from "antd";
+import { message, Pagination, Select } from "antd";
+import { tags } from "../constants/tag";
+import { useHistory } from "react-router";
+import { Link } from "react-router-dom";
+import {
+  FireOutlined,
+  FireTwoTone,
+  LikeOutlined,
+  LikeTwoTone,
+} from "@ant-design/icons";
+import { binarySearch } from "../utils/binarySearch";
+import { endLoading, startLoading } from "../store/action/loading";
+import { getSelfLikes } from "../store/action/like";
 type SelectType = "hotest" | "latest";
 interface ContentItem {
   blog_id: number;
@@ -13,6 +25,11 @@ interface ContentItem {
   heat: number;
   likes: number;
   user: User;
+  tags: Tag[];
+}
+interface Tag {
+  name: string;
+  tag_id?: number;
 }
 interface User {
   user_id: number;
@@ -20,29 +37,39 @@ interface User {
   nickname: string;
   [key: string]: any;
 }
+interface likeParams {
+  likeBool: "0" | "1";
+  blog_id: number;
+}
+type SelectTag = "" | "后端" | "前端" | "人工智能";
+const { Option } = Select;
 const IndexPage = () => {
+  const [refresh, setRefresh] = useState(false);
   const [selectType, setSelectType] = useState<SelectType>("hotest");
   const [totalCount, setTotalCount] = useState<number>(0);
   const [start, setStart] = useState<number>(1);
   const [limit, setLimit] = useState<number>(10);
+  const [selectTag, setSelectTag] = useState<SelectTag>("");
   // const [limit,setLimit]
   const [contentList, setContentList] = useState<Array<ContentItem>>([]);
   const testContext = useContext(DefalutContext) as any;
-  const { defaultState } = testContext;
-  const { loginUser } = defaultState;
-  console.log(defaultState);
+  const { defaultState, dispatch } = testContext;
+  const { loginUser, isLogin } = defaultState;
+  const { likes } = loginUser;
+  const history = useHistory();
   useEffect(() => {
     const params = {
       selectType,
       limit,
       start,
+      tag: selectTag,
     };
     myHttp.get("/blog/get", params).then((data: any) => {
       const { result } = data;
       setTotalCount(result.totalCount);
       setContentList(result.list);
     });
-  }, [selectType, limit, start]);
+  }, [selectType, limit, start, selectTag, refresh]);
   const changePageStart = (page: number) => {
     setStart(page);
     // console.log(page);
@@ -51,6 +78,36 @@ const IndexPage = () => {
     // console.log(current, size);
     setStart(current);
     setLimit(size);
+  };
+  const changeTag = (tag: SelectTag) => {
+    setSelectTag(tag);
+  };
+  const toBlog = () => {
+    history.push("/");
+  };
+  const setLike = ({ blog_id, likeBool }: likeParams) => {
+    if (!isLogin) message.info("请先登录");
+    else {
+      dispatch(startLoading());
+      myHttp
+        .post(`/like/set/${likeBool}`, {
+          user_id: loginUser.user_id,
+          blog_id,
+        })
+        .then(() => {
+          myHttp
+            .get("/like/getSelfLikes", {
+              user_id: loginUser.user_id,
+            })
+            .then((data: any) => {
+              dispatch(getSelfLikes(data.result.likes));
+              dispatch(endLoading());
+              setRefresh((refresh) => {
+                return !refresh;
+              });
+            });
+        });
+    }
   };
   return (
     <Layout>
@@ -78,22 +135,66 @@ const IndexPage = () => {
             >
               最新
             </div>
+            <Select
+              defaultValue=""
+              bordered={false}
+              style={{ width: 100, marginLeft: "20px" }}
+              onChange={changeTag}
+            >
+              <Option value="">全部</Option>
+              {tags.map((tag) => {
+                return (
+                  <Option value={tag.name} key={tag.name}>
+                    {tag.name}
+                  </Option>
+                );
+              })}
+            </Select>
           </div>
           {contentList.map((contentItem) => {
+            const likeFind = likes.findIndex((like: any) => {
+              return like.blog_id === contentItem.blog_id;
+            });
             return (
               <div className="content-item" key={contentItem.blog_id}>
                 <div className="messages">
-                  <span>{contentItem.user?.username}</span>
+                  <span className="content-user">
+                    {contentItem.user?.username}
+                  </span>
                   <span>{contentItem.date}</span>
+                  <span className="content-tags">
+                    {contentItem.tags.map((tag) => tag.name).join("/")}
+                  </span>
                 </div>
-                <div className="title">{contentItem.title}</div>
+                <Link to={`/blog/article?blog_id=${contentItem.blog_id}`}>
+                  <div className="title">{contentItem.title}</div>
+                </Link>
                 <div className="icons">
                   <div className="icons-item">
-                    <img src="/hot-fill.png" alt="" />
+                    <FireTwoTone twoToneColor="" />
                     <span>{contentItem.heat}</span>
                   </div>
-                  <div className="icons-item">
-                    <img src="/good-fill.png" alt="" />
+                  <div
+                    className="icons-item"
+                    onClick={() => {
+                      setLike({
+                        blog_id: contentItem.blog_id,
+                        likeBool:
+                          likeFind === -1 || likes[likeFind].like_bool === "0"
+                            ? "1"
+                            : "0",
+                      });
+                    }}
+                  >
+                    <LikeTwoTone
+                      twoToneColor={
+                        likes
+                          ? likeFind === -1 || likes[likeFind].like_bool === "0"
+                            ? ""
+                            : "#000"
+                          : ""
+                      }
+                    />
                     <span>{contentItem.likes}</span>
                   </div>
                 </div>
@@ -102,7 +203,7 @@ const IndexPage = () => {
           })}
           <Pagination
             showQuickJumper
-            pageSizeOptions={['10', '20', '50', '100']}
+            pageSizeOptions={["10", "20", "50", "100"]}
             current={start}
             total={totalCount}
             pageSize={limit}

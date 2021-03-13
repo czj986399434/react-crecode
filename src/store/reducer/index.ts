@@ -17,8 +17,6 @@ export const reducer = (state: any, action: any) => {
         ...state,
         loginUser: {
           ...action.loginUser,
-          blog_count: action.loginUser.blogs.length,
-          diary_count: action.loginUser.diarys.length,
         },
         isFetching: false,
         isLogin: true,
@@ -73,6 +71,14 @@ export const reducer = (state: any, action: any) => {
           title: "",
         },
       };
+      case types.GET_SELF_LIKES:
+        return {
+          ...state,
+          loginUser:{
+            ...state.loginUser,
+            likes:action.likes
+          }
+        }
     default:
       return state;
   }
@@ -91,15 +97,7 @@ export interface BlogData {
 }
 export const defaultState: DefaultState = {
   isFetching: false,
-  loginUser: {
-    user_id: 1,
-    str_autograph: "哦哦哦哦哦哦",
-    blog_count: 15,
-    diary_count: 10,
-    type: "admin",
-    username: "czjczj",
-    nickname: "czjczj",
-  },
+  loginUser: {},
   isLogin: false,
   router_index: 0,
   loading: false,
