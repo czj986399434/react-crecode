@@ -17,11 +17,10 @@ import '../src/styles/create.scss'
 import '../src/styles/edit.scss'
 import 'antd/dist/antd.css'
 import { createContext, useReducer, useEffect } from 'react'
-import { reducer, defaultState } from './store/reducer/index'
+import { reducer, defaultState, DefaultContext } from './store/reducer/index'
 import { BrowserRouter, Route } from 'react-router-dom'
 import routes from './router-config/index'
-import { labelRouters } from './constants/header';
-export const DefalutContext = createContext<any>(null);
+export const DefalutContext = createContext<DefaultContext>(null as unknown as DefaultContext);
 const storageKey = 'REACT_STATE'
 function App(props:any) {
   const [state, dispatch] = useReducer(reducer,

@@ -2,7 +2,7 @@ import { labelRouters } from "../constants/header";
 import { DefalutContext } from "../App";
 import { useState, useEffect, useMemo, useContext } from "react";
 import { changeRouter, receiveUser, requestUser } from "../store/action/index";
-import { useAdapt } from "../utils/adapthooks";
+import { useAdapt } from "../utils/adapt-hooks";
 import { Dropdown, Menu } from "antd";
 import "../mock/login";
 import { Link, useHistory } from "react-router-dom";

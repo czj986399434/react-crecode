@@ -13,7 +13,7 @@ import {
   LikeOutlined,
   LikeTwoTone,
 } from "@ant-design/icons";
-import { binarySearch } from "../utils/binarySearch";
+import { binarySearch } from "../utils/binary-search";
 import { endLoading, startLoading } from "../store/action/loading";
 import { getSelfLikes } from "../store/action/like";
 type SelectType = "hotest" | "latest";
@@ -86,28 +86,25 @@ const IndexPage = () => {
     history.push("/");
   };
   const setLike = ({ blog_id, likeBool }: likeParams) => {
-    if (!isLogin) message.info("请先登录");
-    else {
-      dispatch(startLoading());
-      myHttp
-        .post(`/like/set/${likeBool}`, {
-          user_id: loginUser.user_id,
-          blog_id,
-        })
-        .then(() => {
-          myHttp
-            .get("/like/getSelfLikes", {
-              user_id: loginUser.user_id,
-            })
-            .then((data: any) => {
-              dispatch(getSelfLikes(data.result.likes));
-              dispatch(endLoading());
-              setRefresh((refresh) => {
-                return !refresh;
-              });
+    dispatch(startLoading());
+    myHttp
+      .post(`/like/set/${likeBool}`, {
+        user_id: loginUser.user_id,
+        blog_id,
+      })
+      .then(() => {
+        myHttp
+          .get("/like/getSelfLikes", {
+            user_id: loginUser.user_id,
+          })
+          .then((data: any) => {
+            dispatch(getSelfLikes(data.result.likes));
+            dispatch(endLoading());
+            setRefresh((refresh) => {
+              return !refresh;
             });
-        });
-    }
+          });
+      });
   };
   return (
     <Layout>
@@ -152,7 +149,7 @@ const IndexPage = () => {
             </Select>
           </div>
           {contentList.map((contentItem) => {
-            const likeFind = likes.findIndex((like: any) => {
+            const likeFind = likes?.findIndex((like: any) => {
               return like.blog_id === contentItem.blog_id;
             });
             return (
@@ -166,7 +163,11 @@ const IndexPage = () => {
                     {contentItem.tags.map((tag) => tag.name).join("/")}
                   </span>
                 </div>
-                <Link to={`/blog/article?blog_id=${contentItem.blog_id}`}>
+                <Link
+                  to={{
+                    pathname: `/blog/article?blog_id=${contentItem.blog_id}`
+                  }}
+                >
                   <div className="title">{contentItem.title}</div>
                 </Link>
                 <div className="icons">
@@ -177,13 +178,15 @@ const IndexPage = () => {
                   <div
                     className="icons-item"
                     onClick={() => {
-                      setLike({
-                        blog_id: contentItem.blog_id,
-                        likeBool:
-                          likeFind === -1 || likes[likeFind].like_bool === "0"
-                            ? "1"
-                            : "0",
-                      });
+                      if (!isLogin) message.info("请先登录");
+                      else
+                        setLike({
+                          blog_id: contentItem.blog_id,
+                          likeBool:
+                            likeFind === -1 || likes[likeFind].like_bool === "0"
+                              ? "1"
+                              : "0",
+                        });
                     }}
                   >
                     <LikeTwoTone

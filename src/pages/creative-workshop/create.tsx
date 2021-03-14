@@ -7,7 +7,7 @@ import axios from 'axios'
 import {
   SyncOutlined,
 } from '@ant-design/icons';
-import { useGlobal } from '../../utils/contexthooks';
+import { useGlobal } from '../../utils/context-hooks';
 const { TextArea } = Input;
 type CodeType = 'css' | 'js' | 'html'
 const Create = () => {

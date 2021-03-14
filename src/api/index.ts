@@ -1,6 +1,8 @@
 import { message } from "antd";
 import axios from "axios";
-export const Axios = axios.create({});
+export const Axios = axios.create({
+  // baseURL:'/nest'
+});
 const successCodeReg = /^20/g;
 // Axios.interceptors.request.use()
 Axios.interceptors.response.use(
