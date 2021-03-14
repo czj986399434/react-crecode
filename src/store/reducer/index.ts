@@ -83,7 +83,7 @@ export const reducer = (state: any, action: any) => {
       return state;
   }
 };
-export interface DefaultContext {
+export interface DefaultContextInterface {
   defaultState: DefaultState;
   dispatch: any;
 }

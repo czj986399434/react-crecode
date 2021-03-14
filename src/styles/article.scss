@@ -132,12 +132,14 @@ $blue:#409EFF;
     .comments-container{
         flex:1;
         position: relative;
+        
         .content{
             background: #F5F5F5;
             font-family: 'Microsoft YaHei';
             padding:5px ;
             color:#7B7AAB;
             font-size: 15px;
+            position: relative;
         }
      }
     .comments>img{
@@ -154,11 +156,15 @@ $blue:#409EFF;
         color:#696969
     }
     
-    .floor{
+    .delete-comment{
+        cursor: pointer;
         position: absolute;
-        right:3px;
-        top:0;
-        transform: translate(0,100%);
+        right:0px;
+        top:50%;
+        transform: translate(-50%,-50%);
+    }
+    .delete-comment:hover{
+        color:$blue
     }
     .input-empty{
         margin-right:10px;

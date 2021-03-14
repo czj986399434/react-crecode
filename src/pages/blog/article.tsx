@@ -1,12 +1,13 @@
 import Layout from "../../components/layout";
-import { useState, useEffect } from "react";
-import { Input, Button, message } from "antd";
+import React, { useState, useEffect, useContext } from "react";
+import { Input, Button, message, Popconfirm } from "antd";
 import { useHistory } from "react-router";
 import { useLocationParams } from "../../utils/location-params-hooks";
 import { myHttp } from "../../api";
 import { useRefresh } from "../../utils/refresh-hooks";
+import { DefaultContextInterface, DefaultState } from "../../store/reducer";
 import moment from "moment";
-import { useGlobal } from "../../utils/context-hooks";
+import { DefalutContext } from "../../App";
 interface Blog {
   blog_id: number;
   content: string;
@@ -28,6 +29,8 @@ const Article = () => {
   const history = useHistory();
   const [commentInput, setCommentInput] = useState("");
   const [blog, setBlog] = useState<Blog>({} as Blog);
+  const [commentIndex, setCommentIndex] = useState(-1);
+  const [deleteVisible, setDeleteVisible] = useState(false);
   const dateArr = blog.date
     ? blog.date?.split(" ")[0].split("-")
     : moment(new Date()).format("YYYY-MM-DD HH:mm:ss");
@@ -35,20 +38,28 @@ const Article = () => {
   const [comments, setComments] = useState<Comment[]>([]);
   const params = useLocationParams();
   const [refresh, changeRefresh] = useRefresh();
-  const [dispatch, { loginUser }] = useGlobal();
+  const {
+    dispatch,
+    defaultState: { loginUser, isLogin },
+  } = useContext(DefalutContext);
   const addComment = () => {
     if (commentInput === "") message.info("不能空白");
     else
-    myHttp
-      .post("/comment/add", {
-        blog_id: params.blog_id,
-        content: commentInput,
-        user_id: loginUser.user_id,
-      })
-      .then(() => {
-        setInputFocus(false);
-        changeRefresh();
-      });
+      myHttp
+        .post("/comment/add", {
+          blog_id: params.blog_id,
+          content: commentInput,
+          user_id: loginUser.user_id,
+        })
+        .then(() => {
+          setInputFocus(false);
+          changeRefresh();
+        });
+  };
+  const deleteComment = (comment_id: number) => {
+    myHttp.post("/comment/delete", { comment_id }).then(() => {
+      changeRefresh();
+    });
   };
   useEffect(() => {
     if (!params.blog_id) {
@@ -130,8 +141,40 @@ const Article = () => {
                     <div className="comments-container">
                       <span className="nickname">{comment.user?.nickname}</span>
                       <span className="time">{comment.date}</span>
-                      <div className="content">{comment.content}</div>
-                      {/* <span className="floor">{index + 1}l</span> */}
+                      <div
+                        className="content"
+                        onMouseEnter={() => {
+                          setDeleteVisible(true);
+                          setCommentIndex(index);
+                        }}
+                        onMouseLeave={() => {
+                          setDeleteVisible(false);
+                          setCommentIndex(-1);
+                        }}
+                      >
+                        <span>{comment.content}</span>
+                        {commentIndex === index &&
+                          isLogin &&
+                          loginUser.user_id === comment.user?.user_id && (
+                            <Popconfirm
+                              title="Are you sure to delete this task?"
+                              onConfirm={() => {
+                                deleteComment(comment.comment_id);
+                              }}
+                              okText="是"
+                              cancelText="否"
+                            >
+                              <span
+                                className="delete-comment"
+                                style={{
+                                  display: deleteVisible ? "inline" : "none",
+                                }}
+                              >
+                                删除
+                              </span>
+                            </Popconfirm>
+                          )}
+                      </div>
                     </div>
                   </div>
                 );
