@@ -28,6 +28,7 @@ const Edit = (props:any) => {
     }
     let content;
     if (loginUser.user_id === user_id) {
+        
         content = (<div className='edit'>
             <p> <EditOutlined onClick={()=>{
                toEdit()

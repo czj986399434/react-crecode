@@ -69,6 +69,8 @@ export const reducer = (state: any, action: any) => {
         blogData: {
           content: "",
           title: "",
+          coverImage: "",
+          tags: [],
         },
       };
     case types.GET_SELF_LIKES:
@@ -89,7 +91,7 @@ export interface DefaultContextInterface {
 }
 export interface DefaultState {
   isFetching: boolean;
-  loginUser: LoginUser ;
+  loginUser: LoginUser;
   isLogin: boolean;
   router_index: number;
   loading: boolean;
@@ -108,8 +110,15 @@ interface LoginUser {
   username: string;
 }
 export interface BlogData {
+  blog_id?: number;
   content: string;
   title: string;
+  coverImage: string;
+  tags:Tag[]
+}
+interface Tag{
+   tag_id?:number;
+   name:string
 }
 export const defaultState: DefaultState = {
   isFetching: false,
@@ -120,5 +129,7 @@ export const defaultState: DefaultState = {
   blogData: {
     content: "",
     title: "",
+    coverImage: "",
+    tags:[]
   },
 };

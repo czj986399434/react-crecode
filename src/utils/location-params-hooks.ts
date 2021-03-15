@@ -18,5 +18,6 @@ export const useLocationParams =()=>{
   paramsArr.forEach((param) => {
     params[param.key] = param.value;
   });
+  console.log(params)
   return params
 }

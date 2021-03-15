@@ -16,7 +16,7 @@ const Create = () => {
   const [css_code,setcss_code]=useState<string>('')
   const cssRef = useRef<HTMLStyleElement>(null)
   const jsRef = useRef<HTMLScriptElement>(null)
-  const [dispatch,{loginUser}]=useGlobal()
+  const {dispatch,defaultState:{loginUser}}=useGlobal()
   //需要转换成闭包，因为每次执行代码script都会运行，会保留变量，会出现变量重复声明问题
   const realjs_code=useMemo(()=>{
         return `( function(){${js_code}} )()`
