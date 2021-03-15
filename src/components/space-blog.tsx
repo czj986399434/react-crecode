@@ -35,6 +35,7 @@ const SpaceBlog = (props: any) => {
     //    })
   };
   const toEdit = (blog_id: number) => {
+    console.log('toEdit')
       history.push(`/blog?blog_id=${blog_id}`)
   };
   useEffect(() => {

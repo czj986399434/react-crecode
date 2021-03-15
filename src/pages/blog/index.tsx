@@ -9,16 +9,42 @@ import React, {
 import E from "wangeditor";
 import { draftContent } from "../../constants/blog";
 import { Button, Input, Popover, Tooltip } from "antd";
-import { tags } from "../../constants/tag";
+import { defaultTags } from "../../constants/tag";
 import { Axios, myHttp } from "../../api";
 import { DefalutContext } from "../../App";
 import { endLoading, startLoading } from "../../store/action/loading";
-import {
-  FileImageOutlined,
-  SyncOutlined,
-} from "@ant-design/icons";
+import { FileImageOutlined, SyncOutlined } from "@ant-design/icons";
 import { initialBlog, saveBlog } from "../../store/action/save-blog";
+import { useLocationParams } from "../../utils/location-params-hooks";
+import { useHistory } from "react-router";
 
+const Tag = (props: any) => {
+  const { chooseTags, changeTags, index, tag } = props;
+  const [ghost, setGhost] = useState(true);
+  useEffect(() => {
+    if (chooseTags[index]) setGhost(false);
+    else setGhost(true);
+  }, []);
+  useEffect(() => {
+    if (!ghost) changeTags(index, { name: tag.name });
+    else changeTags(index, undefined);
+  }, [ghost]);
+  return (
+    <Button
+      size="small"
+      className="tag"
+      ghost={ghost}
+      onClick={() => {
+        setGhost((ghost) => {
+          return !ghost;
+        });
+      }}
+      style={{ color: tag.color }}
+    >
+      {tag.name}
+    </Button>
+  );
+};
 const Submit = (props: any) => {
   const { chooseTags, changeTags } = props;
   const {
@@ -32,29 +58,16 @@ const Submit = (props: any) => {
   return (
     <div className="submit-box">
       <p>tags</p>
-      {tags.map((tag, index) => {
-        const Tag = () => {
-          const [ghost, setGhost] = useState(true);
-          return (
-            <Button
-              key={index}
-              size="small"
-              className="tag"
-              ghost={ghost}
-              onClick={() => {
-                setGhost((ghost) => {
-                  if (ghost) changeTags(index, { name: tag.name });
-                  else changeTags(index, undefined);
-                  return !ghost;
-                });
-              }}
-              style={{ color: tag.color }}
-            >
-              {tag.name}
-            </Button>
-          );
-        };
-        return <Tag key={index}></Tag>;
+      {defaultTags.map((tag, index) => {
+        return (
+          <Tag
+            key={index}
+            chooseTags={chooseTags}
+            changeTags={changeTags}
+            index={index}
+            tag={tag}
+          ></Tag>
+        );
       })}
       <Button
         type="primary"
@@ -69,13 +82,17 @@ const Submit = (props: any) => {
 };
 let editor = null as any;
 const Blog = (props: any) => {
-  const chooseTags = new Array(tags.length);
+  const history =useHistory()
+  const [chooseTags, setChooseTags] = useState<any[]>(
+    new Array(defaultTags.length)
+  );
   const [draftBool, setDraftBool] = useState<boolean>(false);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [content, setContent] = useState<string>("");
   const [title, setTitle] = useState<string>("");
   const [coverImage, setCoverImage] = useState("");
   const [saveIconFlag, setSaveIconFlag] = useState<boolean>(false);
+  const locationParams = useLocationParams();
   const {
     dispatch,
     defaultState: { loading, loginUser, blogData },
@@ -86,26 +103,50 @@ const Blog = (props: any) => {
       return tag !== undefined;
     });
     dispatch(startLoading());
-   myHttp.post("/blog/add", {
-      title,
-      tags,
-      content,
-      coverImage:'',
-      user_id: loginUser.user_id,
-    }).then(data=>{
-      dispatch(endLoading())
-      dispatch(initialBlog())
-      setTimeout(()=>{
-         // eslint-disable-next-line no-restricted-globals
-         location.reload()
-      },1000)
-      setIsModalVisible(false)
-    })
+    const blog_id = locationParams.blog_id || blogData.blog_id;
+    if (blog_id) {
+      myHttp.post("/blog/update", {
+        title,
+        content,
+        coverImage,
+        blog_id,
+        tags,
+      }).then((data)=>{
+        dispatch(endLoading());
+        dispatch(initialBlog());
+        setTimeout(() => {
+          // eslint-disable-next-line no-restricted-globals
+          history.goBack()
+        }, 1000);
+        setIsModalVisible(false);
+      });
+    }else{
+      myHttp
+      .post("/blog/add", {
+        title,
+        tags,
+        content,
+        coverImage: "",
+        user_id: loginUser.user_id,
+      })
+      .then((data) => {
+        dispatch(endLoading());
+        dispatch(initialBlog());
+        setTimeout(() => {
+          // eslint-disable-next-line no-restricted-globals
+          location.reload();
+        }, 1000);
+        setIsModalVisible(false);
+      });
   };
+    }
+    
   const save = useCallback(() => {
     const saveData = {
       content,
       title,
+      coverImage,
+      chooseTags,
     };
     dispatch(saveBlog(saveData));
   }, [content, title, dispatch]);
@@ -131,26 +172,53 @@ const Blog = (props: any) => {
       const saveData = {
         content,
         title,
+        coverImage,
+        chooseTags,
       };
       dispatch(saveBlog(saveData));
       timeoutTimer = setTimeout(() => {
         setSaveIconFlag(false);
         setDraftBool(true);
       }, 500);
-    }, 1000*60);
+    }, 1000 * 60);
     return () => {
       clearInterval(interTimer);
       timeoutTimer && clearTimeout(timeoutTimer);
     };
-  }, [content,title,dispatch]);
+  }, [content, title, dispatch]);
   useEffect(() => {
-    if (props.blog_id) {
+    if (locationParams.blog_id) {
+      myHttp
+        .get("/blog/getOne", {
+          blog_id: locationParams.blog_id,
+        })
+        .then((data: any) => {
+          const { title, coverImage, content, tags } = data.result;
+          setTitle(title);
+          editor.txt.html(content);
+          setCoverImage(coverImage);
+          //这里需要转换，因为请求得到的是带有id的，不能随便直接传给chooseTags
+          const chooseTagss = new Array(defaultTags.length);
+          tags.forEach((tag: any) => {
+            const index = defaultTags.findIndex((val) => {
+              return val.name === tag.name;
+            });
+            console.log(index);
+            if (index !== -1) {
+              chooseTagss[index] = { ...tag };
+            }
+          });
+          console.log(chooseTagss);
+          setChooseTags(chooseTagss);
+        });
     } else {
-      const { title, content } = blogData;
+      const { title, content, coverImage, chooseTags } = blogData;
       setTitle(title);
-      editor.txt.html(content)
+      editor.txt.html(content);
+      setCoverImage(coverImage);
+      setChooseTags(chooseTags);
     }
-  }, [props.blog_id]);
+  }, [locationParams.blog_id]);
 
   const uploadCover = () => {
     const file = fileRef.current.files[0];
@@ -222,7 +290,9 @@ const Blog = (props: any) => {
                   <Submit
                     chooseTags={chooseTags}
                     changeTags={(index: number, obj: any) => {
-                      chooseTags[index] = obj;
+                      const tagss = [...chooseTags];
+                      tagss[index] = obj;
+                      setChooseTags(tagss);
                     }}
                     onSubmit={submitBlog}
                   ></Submit>
@@ -245,9 +315,7 @@ const Blog = (props: any) => {
               </Popover>
             </div>
           </div>
-          <div
-            className="editor"
-          >
+          <div className="editor">
             <div id="div1" className="wangeditor"></div>
           </div>
         </div>

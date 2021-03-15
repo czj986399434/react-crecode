@@ -4,7 +4,7 @@ import { DefalutContext } from "../App";
 import { requestUser, receiveUser } from "../store/action/index";
 import { myHttp } from "../api";
 import { message, Pagination, Select } from "antd";
-import { tags } from "../constants/tag";
+import { defaultTags } from "../constants/tag";
 import { useHistory } from "react-router";
 import { Link } from "react-router-dom";
 import {
@@ -139,7 +139,7 @@ const IndexPage = () => {
               onChange={changeTag}
             >
               <Option value="">全部</Option>
-              {tags.map((tag) => {
+              {defaultTags.map((tag) => {
                 return (
                   <Option value={tag.name} key={tag.name}>
                     {tag.name}

@@ -70,7 +70,7 @@ export const reducer = (state: any, action: any) => {
           content: "",
           title: "",
           coverImage: "",
-          tags: [],
+          chooseTags: [],
         },
       };
     case types.GET_SELF_LIKES:
@@ -114,7 +114,7 @@ export interface BlogData {
   content: string;
   title: string;
   coverImage: string;
-  tags:Tag[]
+  chooseTags:Tag[]
 }
 interface Tag{
    tag_id?:number;
@@ -130,6 +130,6 @@ export const defaultState: DefaultState = {
     content: "",
     title: "",
     coverImage: "",
-    tags:[]
+    chooseTags:[]
   },
 };

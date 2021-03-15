@@ -1,4 +1,4 @@
-export const tags = [
+export const defaultTags = [
     {
       name: "后端",
       color: "#03A9F4",
