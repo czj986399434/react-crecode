@@ -145,8 +145,9 @@ $blue:#409EFF;
     padding: 20px;
     word-wrap: break-word;
     cursor: pointer;
-    // transition:all 1s;
     z-index: 100;
+    
+
   }
   .empty-content{
     position: relative;
@@ -174,25 +175,63 @@ $blue:#409EFF;
   .content-hidden{
       height:100px;
       overflow: hidden;
-      display: -webkit-box;
-      text-overflow: ellipsis;
-      -webkit-line-clamp:6;  /*要显示的行数*/
-      -webkit-box-orient: vertical;
+      // display: -webkit-box;
+      // text-overflow: ellipsis;
+      // -webkit-line-clamp:6;  /*要显示的行数*/
+      // -webkit-box-orient: vertical;
       font-size:16px;
+      animation: close 3s;
   }
-  // .content-more{
-  //   height:auto;
-  //   position:fixed;
-  //   top:50%;
-  //   left:50%;
-  //   transform: translate(-50%,-50%);
-  // }
   .content-more{
     height: auto;
     transform: translate(-210px,0);
+    animation: open 3s;
    
   }
   .content-more:hover{
      content: '展开';
+  }
+  .transparent{
+    opacity: 0;
+  }
+  .aniCA{
+    animation: cardAppear 1s;
+  }
+  @keyframes open {
+    0%{
+      height: 100px;
+      transform: translate(0,0);
+    }
+    50%{
+      height: auto;
+      transform: translate(0,0);
+    }
+    100%{
+      transform: translate((-210px,0));
+    }
+    
+  }
+  @keyframes  close {
+    0%{
+      transform: translate((-210px,0));
+      height: auto;
+    }
+    50%{
+      transform: translate(0,0);
+      height: auto;
+    }
+    100%{
+      height: 100px;
+    }
+  }
+  @keyframes cardAppear {
+    from{
+      opacity: 0;
+      transform: rotate(-30deg);
+    }
+    to{
+      opacity: 1;
+      transform: rotate(0deg);
+    }
   }
 }
