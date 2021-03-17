@@ -1,3 +1,5 @@
+import { EventType, SelectorMatcherOptions } from "@testing-library/dom";
+
 export function isElementInViewport(el: HTMLElement) {
      //获取元素是否在可视区域
      let rect = el.getBoundingClientRect();
@@ -29,4 +31,18 @@ export function rgb(){
   var b = Math.floor(Math.random()*256);
   var rgb = '('+r+','+g+','+b+')';
   return rgb;
+}
+export const delegate=(element:Element, eventType:EventType, selector:string, fn:Function)=> {
+  element.addEventListener(eventType, e => {
+      let el = e.target as any 
+      while (!el.matches(selector)) {
+          if (element === el) {
+              el = null
+              break
+          }
+          el = el.parentNode
+      }
+      el && fn.call(el, e, el)
+  },false)
+  return element
 }
