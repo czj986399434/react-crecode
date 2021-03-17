@@ -5,9 +5,11 @@ import { useEffect, useState, useContext } from "react";
 import { DefalutContext } from "../../App";
 import { Select } from "antd";
 import SpaceBlog from "../../components/space-blog";
+import { useLocationParams } from "../../utils/location-params-hooks";
 type DisplayType = "blog" | "diary" | "picture";
 const Space = (props: any) => {
   const { Option } = Select;
+  const locationParams =useLocationParams()
   const spaceUser = {
     user_id: 1,
     str_username: "weilinerL",
@@ -25,18 +27,16 @@ const Space = (props: any) => {
   } = useContext(DefalutContext) as any;
   const [displayType, setDisplayType] = useState<DisplayType>("blog");
   const [pictureDisplay, setPictureDisplay] = useState("basic");
-  const self = loginUser.user_id === spaceUser.user_id;
   let a;
   const childProps = {
-    user_id: props.user_id ? props.user_id : loginUser.user_id,
-    self
+    user_id: locationParams.user_id ? locationParams.user_id : loginUser.user_id,
   };
   switch (displayType) {
     case "blog":
       a = <SpaceBlog {...childProps}></SpaceBlog>;
       break;
     case "diary":
-      a = <Diary></Diary>;
+      a = <Diary {...childProps}></Diary>;
       break;
     case "picture":
       a = (

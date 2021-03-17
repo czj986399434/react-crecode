@@ -94,9 +94,9 @@ $blue:#409EFF;
     letter-spacing: .1em;
   }
 
-  .card>h2 {
+  .card>.borderRadius2 {
     font-size: 14px;
-    background: #409eff;
+    // background: #409eff;
     display: inline-block;
     position: absolute;
     top: -22px;
@@ -115,8 +115,42 @@ $blue:#409EFF;
 
   .borderRadius2 {
     border-radius: 3px;
+   
+  }
+  .mood{
+    background:$blue
+    // animation: color 6s infinite;
   }
 
+  .mood-buttons{
+     display: flex;
+     height: 100%;
+     align-items: center;
+     justify-content: space-around;
+     animation:buttonAppear 1s;
+  }
+  .mood-button{
+    font-size: 20px;
+    cursor: pointer;
+  }
+  .danmu{
+    width: 360px;
+    height: 100px;
+    background: #ffffff;
+    position:absolute;
+    overflow: hidden;
+    box-sizing: border-box;
+    padding: 10px;
+  }
+  .danmu>div{
+    display: inline-block;
+    position: absolute;
+    width: 400px;
+    height: 30px;
+    top:30px;
+    line-height: 30px;
+    animation: danmu 8s infinite linear;
+  }
   .cardBody {
     width: 360px;
     height: 100px;
@@ -130,7 +164,10 @@ $blue:#409EFF;
     transition: all 1s;
     position: relative;
   }
-
+  .translucent{
+    opacity: 0.3;
+    background: #000;
+  }
   .content {
     position: relative;
     width: 360px;
@@ -232,6 +269,44 @@ $blue:#409EFF;
     to{
       opacity: 1;
       transform: rotate(0deg);
+    }
+  }
+  @keyframes color {
+    0%{
+      background: red
+    }
+    
+    100%{
+      background:blue
+    }
+    
+  }
+  @keyframes buttonAppear {
+    0%{
+      opacity: 0;
+      transform: translate(0,100px);
+    }
+    50%{
+      opacity: 0.5;
+      transform: translate(0,100px);
+    }
+    100%{
+      opacity: 1;
+      transform: translate(0,0);
+    }
+  }
+  @keyframes danmu{
+    0%{
+  
+    }
+    50%{
+      transform:translate(-300px,0);
+    }
+    80%{
+      opacity: 0
+    }
+    100%{
+      opacity: 0
     }
   }
 }
