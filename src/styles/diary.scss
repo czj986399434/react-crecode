@@ -69,6 +69,9 @@ $blue:#409EFF;
    .mask-card{
     transition: all 3s;
    }
+   .mask-card>.borderRadius2{
+     transition:all 3s;
+   }
    .rotate-y{
     animation: rotateY 2s infinite alternate linear;
    }

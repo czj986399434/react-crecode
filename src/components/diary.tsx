@@ -38,13 +38,16 @@ const Card = ({ card }: CardProps) => {
   const [buttonVisible, setButtonVisible] = useState<boolean>(false);
   const [moodEditVisible, setMoodEditVisible] = useState<boolean>(false);
   const [commentsVisible, setCommentsVisible] = useState<boolean>(false);
-  const [contentVisible,setContentVisible]=useState<boolean>(false);
-  const [readClass,setReadClass]=useState<string>('read-more opacity-appear')
+  const [contentVisible, setContentVisible] = useState<boolean>(false);
+  const [readClass, setReadClass] = useState<string>(
+    "read-more opacity-appear"
+  );
   const [lineVisible, setLineVisible] = useState<boolean>(false);
   const [moodEditValue, setMoodEditValue] = useState<string>("");
   const [readButtonVisible, setReadButtonVisible] = useState<boolean>(false);
   const [comments, setComments] = useState<any[]>([]);
-  const [maskCardStyle,setMaskCardStyle]=useState<React.CSSProperties >({})
+  const [maskCardStyle, setMaskCardStyle] = useState<React.CSSProperties>({});
+  const [maskSmallCardStyle,setMaskSmallCardStyle]=useState<React.CSSProperties>({});
   const handleScroll = () => {
     if (
       cardRef.current &&
@@ -65,7 +68,7 @@ const Card = ({ card }: CardProps) => {
   };
   const getComments = () => {
     setLineVisible(true);
-      setReadButtonVisible(true);
+    setReadButtonVisible(true);
     setCommentsVisible(true);
     myHttp
       .get("/comment/getDiaryComments", { diary_id: card.diary_id })
@@ -73,42 +76,49 @@ const Card = ({ card }: CardProps) => {
         setComments(data.result);
       });
   };
-  const readMore=(e:React.MouseEvent<HTMLSpanElement, MouseEvent>)=>{
-      
-      setContentVisible(true) 
-  }
-  useEffect(()=>{
-     setTimeout(()=>{
-        setReadClass('read-more rotate-y')
-     },4000)
-     //为啥加了这个就可以了呢
-     return ()=>{
-       setReadClass('read-more opacity-appear')
-     }
-  },[readButtonVisible])
+  const readMore = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
+    setContentVisible(true);
+  };
+  useEffect(() => {
+    setTimeout(() => {
+      setReadClass("read-more rotate-y");
+    }, 4000);
+    //为啥加了这个就可以了呢
+    return () => {
+      setReadClass("read-more opacity-appear");
+    };
+  }, [readButtonVisible]);
   useEffect(() => {
     window.addEventListener("scroll", debounce(handleScroll, 200), true);
-    delegate(cardRef.current as Element,'click','.read-more',(e:any,el:any)=>{
-        console.log(e.currentTarget.getBoundingClientRect())
-        const {top,left} = e.currentTarget.getBoundingClientRect()
+    delegate(
+      cardRef.current as Element,
+      "click",
+      ".read-more",
+      (e: any, el: any) => {
+        console.log(e.currentTarget.getBoundingClientRect());
+        const { top, left } = e.currentTarget.getBoundingClientRect();
         setMaskCardStyle({
-          position:'fixed',
-          top:top-30,
-          left:left-30
-        })
-        setTimeout(()=>{
-           setMaskCardStyle({
-             position:'fixed',
-             top:'50%',
-             left:'50%',
-             transform:'translate(-50%,-50%)'
-           })
-        },1000)
-        console.log(el)
-    })
+          position: "fixed",
+          top: top - 30,
+          left: left - 30,
+        });
+        setTimeout(() => {
+          setMaskCardStyle({
+            position: "fixed",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%,-50%)",
+          });
+          setMaskSmallCardStyle({
+            opacity:0
+          })
+        }, 1000);
+        console.log(el);
+      }
+    );
     return () => {
       window.removeEventListener("scroll", () => {});
-      cardRef.current?.removeEventListener('click',()=>{})
+      cardRef.current?.removeEventListener("click", () => {});
     };
   }, []);
   return (
@@ -118,16 +128,36 @@ const Card = ({ card }: CardProps) => {
       }
       ref={cardRef}
     >
-      {contentVisible&&(<Mask onClick={(e)=>{
-        setContentVisible(false)
-        e.stopPropagation()
-      }}><div className='card mask-card' style={maskCardStyle}></div></Mask>)}
+      {contentVisible && (
+        <Mask
+          onClick={(e) => {
+            setContentVisible(false);
+            e.stopPropagation();
+          }}
+        >
+          <div className="card mask-card" style={maskCardStyle}>
+            <h1 className="borderRadius2" style={maskSmallCardStyle}>{card.date.split(" ")[0]}</h1>
+            <div
+              className="borderRadius2 mood"
+              onMouseEnter={() => {
+                setButtonVisible(true);
+              }}
+              style={
+                {
+                  ...maskSmallCardStyle
+                  // backgroundImage: `linear-gradient(to right,red,blue)`,
+                }
+              }
+            ></div>
+          </div>
+        </Mask>
+      )}
       {lineVisible && <div className="vertical-line"></div>}
       {readButtonVisible && (
         <div className={readClass}>
-        <Tooltip title="看正文">
-          <ReadOutlined  onClick={readMore}/>
-        </Tooltip>
+          <Tooltip title="看正文">
+            <ReadOutlined onClick={readMore} />
+          </Tooltip>
         </div>
       )}
       <h1 className="borderRadius2">{card.date.split(" ")[0]}</h1>
@@ -178,7 +208,13 @@ const Card = ({ card }: CardProps) => {
       </div>
       <div className="danmu">
         {comments.map((comment: any, index: number) => {
-          return <Comment comment={comment} key={comment.comment_id} index={index}></Comment>;
+          return (
+            <Comment
+              comment={comment}
+              key={comment.comment_id}
+              index={index}
+            ></Comment>
+          );
         })}
       </div>
       <div
