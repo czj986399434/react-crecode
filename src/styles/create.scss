@@ -1,26 +1,99 @@
-.create{
-    .cards{
-        display: flex;
-        justify-content: space-around;
-    }
-    .card{
-    display: inline-flex;
-    width: 30%;
+.create {
+  .cards {
+    display: flex;
     flex-direction: column;
-    justify-content:space-between;
-    margin-right:10px;
+    justify-content: space-around;
+    background: #fff;
+    align-items: center;
+    background-attachment: fixed !important;
+    background: url("../../public/create.jpg") no-repeat;
+    background-size: 100% 100%;
+    padding-top: 50px;
     position: relative;
+  }
+  .card {
+    transition: 0.5s;
+    margin: 20px 0;
+    padding: 20px 5px;
+    cursor: pointer;
+    height: auto;
+    border: 1px solid #ccc;
+    border-radius: 66px 26px 66px 26px;
+    background: #fff;
+    min-width: 700px;
+  }
+
+  .card:hover {
+    box-shadow: 3px 3px 6px 3px #ccc;
+  }
+  .lamp-box{
+    width: 100px;
+    height: 100px;
+    // background: #fff;
+    position: absolute;
+    top:0px;
+    right:20%;
+    z-index: 1000;
+    animation: swing 5s infinite  linear;
+    transform-origin: 50% 0;
+    cursor: pointer;
+  }
+  .lamp-box:hover{
+      animation-play-state: paused;
+  }
+  .vertical-line {
+    position: absolute;
+    background: #000;
+    width: 1px;
+    height: 70px;
+    top: 0px;
+    left: 50%;
+    transform: translate(-50%, 0);
+    // animation: stretch 2s;
+  }
+  .lamp{
+    background-size: 100% 100% !important;
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    bottom: 0;
+    left:50%;
+    transform: translate(-50%,0);
+  }
+  .close-lamp{
+      background: url("../../public/lamp.png") no-repeat;
+      object-fit: cover;
+  }
+  .light-lamp{
+    background: url("../../public/light-lamp.png") no-repeat;
+  }
+  @keyframes swing {
+    0%,100% {
+        transform:rotate(-45deg);
     }
-    .show{
-        min-height: 50px;
-        background: #fff;
+    20% {
+        transform:rotate(15deg);
     }
-    .text-area{
-        flex:1;
+    30% {
+        transform:rotate(30deg);
     }
-    .run-js{
-        position: absolute;
-        right:0;
-        bottom:0;
+    40% {
+        transform:rotate(45deg);
     }
+    50% {
+        transform:rotate(30deg);
+    }
+    60% {
+        transform:rotate(15deg);
+    }
+    70% {
+        transform:rotate(0deg);
+    }
+    80% {
+        transform:rotate(-15deg);
+    }
+    90% {
+        transform:rotate(-30deg);
+    }
+  }
 }
