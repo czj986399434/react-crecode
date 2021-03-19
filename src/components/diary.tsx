@@ -1,17 +1,24 @@
 import Layout from "./layout";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { debounce, delegate, isElementInViewport, rgb } from "../utils";
 import { myHttp } from "../api";
-import { Input, Tooltip } from "antd";
+import { Input, notification, Popconfirm, Tooltip } from "antd";
 import {
   CloseCircleOutlined,
   EditOutlined,
+  LockOutlined,
   ReadOutlined,
   RollbackOutlined,
+  UnlockOutlined,
 } from "@ant-design/icons";
 import { Mask } from "./common/mask";
+import Modal from "antd/lib/modal/Modal";
+import { DefalutContext } from "../App";
+import { endLoading, startLoading } from "../store/action/loading";
 interface CardProps {
   card: any;
+  user_id: number;
+  refresh: Function;
 }
 const Comment = (props: any) => {
   const { comment, index } = props;
@@ -32,8 +39,12 @@ const Comment = (props: any) => {
     </div>
   );
 };
-const Card = ({ card }: CardProps) => {
+const Card = ({ card, user_id, refresh }: CardProps) => {
   const cardRef = useRef<HTMLDivElement>(null);
+  const {
+    dispatch,
+    defaultState: { loginUser },
+  } = useContext(DefalutContext);
   const [inClient, setInClient] = useState<boolean>(true);
   const [buttonVisible, setButtonVisible] = useState<boolean>(false);
   const [moodEditVisible, setMoodEditVisible] = useState<boolean>(false);
@@ -42,12 +53,19 @@ const Card = ({ card }: CardProps) => {
   const [readClass, setReadClass] = useState<string>(
     "read-more opacity-appear"
   );
+  const [commentModalVisible, setCommentModalVisible] = useState<boolean>(
+    false
+  );
   const [lineVisible, setLineVisible] = useState<boolean>(false);
   const [moodEditValue, setMoodEditValue] = useState<string>("");
+  const [addCommentContent, setAddCommentContent] = useState<string>("");
   const [readButtonVisible, setReadButtonVisible] = useState<boolean>(false);
   const [comments, setComments] = useState<any[]>([]);
   const [maskCardStyle, setMaskCardStyle] = useState<React.CSSProperties>({});
-  const [maskSmallCardStyle,setMaskSmallCardStyle]=useState<React.CSSProperties>({});
+  const [
+    maskSmallCardStyle,
+    setMaskSmallCardStyle,
+  ] = useState<React.CSSProperties>({});
   const handleScroll = () => {
     if (
       cardRef.current &&
@@ -79,6 +97,37 @@ const Card = ({ card }: CardProps) => {
   const readMore = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
     setContentVisible(true);
   };
+  const addComment = () => {
+    myHttp
+      .post("/comment/add", {
+        diary_id: card.diary_id,
+        user_id: loginUser.user_id,
+        content: addCommentContent,
+      })
+      .then(() => {
+        refresh();
+      });
+    setCommentModalVisible(false);
+  };
+  const updateDiary = (params: any) => {
+    dispatch(startLoading());
+    myHttp
+      .post("/diary/update", params)
+      .then(() => {
+        refresh();
+        dispatch(endLoading());
+      })
+      .catch(() => {
+        dispatch(endLoading());
+      });
+  };
+  const deleteDiary =()=>{
+    myHttp.post('/diary/delete',{
+      diary_id:card.diary_id
+    }).then(()=>{
+      refresh();
+    })
+  }
   useEffect(() => {
     setTimeout(() => {
       setReadClass("read-more rotate-y");
@@ -95,7 +144,6 @@ const Card = ({ card }: CardProps) => {
       "click",
       ".read-more",
       (e: any, el: any) => {
-        console.log(e.currentTarget.getBoundingClientRect());
         const { top, left } = e.currentTarget.getBoundingClientRect();
         setMaskCardStyle({
           position: "fixed",
@@ -107,13 +155,17 @@ const Card = ({ card }: CardProps) => {
             position: "fixed",
             top: "50%",
             left: "50%",
-            transform: "translate(-50%,-50%)",
+            transform: "translate(-230px,-100px)",
           });
           setMaskSmallCardStyle({
-            opacity:0
-          })
+            opacity: 0,
+          });
         }, 1000);
-        console.log(el);
+        setTimeout(() => {
+          setMaskCardStyle((style: any) => {
+            return { ...style, maxHeight: "100%" };
+          });
+        }, 2000);
       }
     );
     return () => {
@@ -121,34 +173,40 @@ const Card = ({ card }: CardProps) => {
       cardRef.current?.removeEventListener("click", () => {});
     };
   }, []);
+  const cardClass = useMemo(() => {
+    let classArr = ["card", "borderRadius1"];
+    if (Number(card.open) === 0) classArr.push("close-color");
+    if (inClient) classArr.push("aniCA");
+    else classArr.push("transparent");
+    return classArr.join(" ");
+  }, [inClient, card.open]);
   return (
-    <div
-      className={
-        inClient ? "aniCA card borderRadius1" : "card borderRadius1 transparent"
-      }
-      ref={cardRef}
-    >
+    <div className={cardClass} ref={cardRef}>
       {contentVisible && (
         <Mask
           onClick={(e) => {
             setContentVisible(false);
             e.stopPropagation();
+            setMaskSmallCardStyle({
+              opacity: 1,
+            });
           }}
         >
           <div className="card mask-card" style={maskCardStyle}>
-            <h1 className="borderRadius2" style={maskSmallCardStyle}>{card.date.split(" ")[0]}</h1>
+            <h1 className="borderRadius2" style={maskSmallCardStyle}>
+              {card.date.split(" ")[0]}
+            </h1>
             <div
               className="borderRadius2 mood"
               onMouseEnter={() => {
                 setButtonVisible(true);
               }}
-              style={
-                {
-                  ...maskSmallCardStyle
-                  // backgroundImage: `linear-gradient(to right,red,blue)`,
-                }
-              }
+              style={{
+                ...maskSmallCardStyle,
+                // backgroundImage: `linear-gradient(to right,red,blue)`,
+              }}
             ></div>
+            <span>{card.content}</span>
           </div>
         </Mask>
       )}
@@ -172,21 +230,49 @@ const Card = ({ card }: CardProps) => {
           }
         }
       >
-        {buttonVisible && (
+        {user_id === loginUser.user_id && buttonVisible && (
           <div className="mood-buttons">
             <EditOutlined
               className="mood-edit mood-button"
               onClick={() => {
-                editMood();
+                // editMood();
+                notification.info({
+                  message: '日志写实',
+                  description:
+                    '暂不提供修改功能',
+                });
               }}
             />
-            <CloseCircleOutlined className="mood-delete mood-button" />
-            <RollbackOutlined
+            <Popconfirm
+              title="删除后不可还原，谨慎操作"
+              onConfirm={deleteDiary}
+              okText="是"
+              cancelText="否"
+            >
+              <CloseCircleOutlined className="mood-delete mood-button" />
+            </Popconfirm>
+            
+            {/* <RollbackOutlined
               className="mood-button "
               onClick={() => {
                 setButtonVisible(false);
               }}
-            />
+            /> */}
+            {card.open ? (
+              <UnlockOutlined
+                className="mood-button"
+                onClick={() => {
+                  updateDiary({ diary_id: card.diary_id, open: "0" });
+                }}
+              />
+            ) : (
+              <LockOutlined
+                className="mood-button"
+                onClick={() => {
+                  updateDiary({ diary_id: card.diary_id, open: "1" });
+                }}
+              />
+            )}
           </div>
         )}
         {moodEditVisible && (
@@ -223,6 +309,9 @@ const Card = ({ card }: CardProps) => {
             ? "cardBody borderRadius1 translucent"
             : "cardBody borderRadius1"
         }
+        onClick={() => {
+          setCommentModalVisible(true);
+        }}
         onMouseEnter={() => {
           getComments();
         }}
@@ -232,6 +321,21 @@ const Card = ({ card }: CardProps) => {
       >
         <p>{card.abstract}</p>
       </div>
+      <Modal
+        title="竟然被你找到评论的入口"
+        visible={commentModalVisible}
+        onOk={addComment}
+        onCancel={() => {
+          setCommentModalVisible(false);
+        }}
+      >
+        <Input
+          value={addCommentContent}
+          onChange={(e) => {
+            setAddCommentContent(e.target.value);
+          }}
+        ></Input>
+      </Modal>
     </div>
   );
 };
@@ -241,6 +345,7 @@ interface DiaryProps {
 const Diary = (props: DiaryProps) => {
   const { user_id } = props;
   const [cards, setCards] = useState<any>([]);
+  const [refreshFlag, setRefreshFlag] = useState<boolean>(false);
   const [showStoreList, setShowStoreList] = useState<any>(
     cards.map((card: any, index: any) => {
       return {
@@ -248,6 +353,11 @@ const Diary = (props: DiaryProps) => {
       };
     })
   );
+  const refresh = () => {
+    setRefreshFlag((refreshFlag) => {
+      return !refreshFlag;
+    });
+  };
   useEffect(() => {
     myHttp
       .get("/diary/getSelfAll", {
@@ -256,7 +366,7 @@ const Diary = (props: DiaryProps) => {
       .then((data: any) => {
         setCards(data.result.list);
       });
-  }, []);
+  }, [refreshFlag]);
   useEffect(() => {
     setShowStoreList(
       cards.map(() => {
@@ -287,7 +397,7 @@ const Diary = (props: DiaryProps) => {
           if (index % 2 === 0) {
             return (
               <li key={card.diary_id}>
-                <Card card={card}></Card>
+                <Card card={card} user_id={user_id} refresh={refresh}></Card>
                 {Blank}
               </li>
             );
@@ -295,7 +405,7 @@ const Diary = (props: DiaryProps) => {
             return (
               <li key={card.diary_id}>
                 {Blank}
-                <Card card={card}></Card>;
+                <Card card={card} user_id={user_id} refresh={refresh}></Card>;
               </li>
             );
           }

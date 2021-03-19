@@ -3,12 +3,28 @@ $grey:#909090;
 $blue:#409EFF;
 
 .diary {
+   
+        
+    
   ul {
-    margin-top: 100px;
+    
+    background-attachment: fixed !important;
+       background: url('../../public/backg.jpg') no-repeat;
+       background-size: 100% 100%;
     padding-top: 50px;
-    margin-bottom: 170px;
+    
   }
-
+  ul::after{
+    content:'';
+    position:fixed;
+    z-index:-1;
+    top:0;
+    right:0;
+    bottom:0;
+    left:0;
+    background: url('../../public/backg.jpg') no-repeat ;
+    background-size: 100% 100%;
+}
   li {
     position: relative;
     list-style: none;
@@ -45,15 +61,18 @@ $blue:#409EFF;
 
   .card {
     position: relative;
-    background: #ffffff;
+    background-color: #ffffff;
     width: 400px;
-    height: 140px;
+    max-height: 140px;
+    min-height: 140px;
     margin: 30px;
     border-radius: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
     transform-origin: 0% 0%;
+    transition-property: background-color;
+    transition-duration: 1s;
   }
    .read-more{
      position: absolute;
@@ -67,10 +86,21 @@ $blue:#409EFF;
   //    transform: translate(-50%,-50%);
   //  }
    .mask-card{
-    transition: all 3s;
+     box-sizing: border-box;
+     padding:10px;
+     display: inline-block;
+    transition: all 1s;
+    overflow: hidden;
+    // max-height: 1000px;
+    word-wrap: break-word;  //只对英文起作用，以单词作为换行依据。
+    word-break: normal; 
+    font-size: 20px;
+   }
+   .max-height{
+     max-height: 100%;
    }
    .mask-card>.borderRadius2{
-     transition:all 3s;
+     transition:all 1s;
    }
    .rotate-y{
     animation: rotateY 2s infinite alternate linear;
@@ -175,6 +205,9 @@ $blue:#409EFF;
     overflow: hidden;
     box-sizing: border-box;
     padding: 10px;
+  }
+  .close-color{
+    background-color: #f0e6e6 ;
   }
   .danmu>div{
     display: inline-block;
