@@ -1,6 +1,6 @@
 export const labelRouters=[{
     name:'主页',
-    value:'/'
+    value:'/',
 },{
     name:'博客中心',
     value:'/blog'

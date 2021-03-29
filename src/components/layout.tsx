@@ -1,4 +1,6 @@
+
 import React, { ReactNode } from "react";
+import Footer from "./footer";
 import Header from "./header";
 type Props = {
   children?: ReactNode;
@@ -12,8 +14,7 @@ const Layout = ({ children, title = "crecode" }: Props) => (
     </header>
     {children}
     <footer>
-      <hr />
-      <span>I'm here to stay (Footer)</span>
+     <Footer></Footer>
     </footer>
   </div>
 );

@@ -46,3 +46,6 @@ export const delegate=(element:Element, eventType:EventType, selector:string, fn
   },false)
   return element
 }
+export const sleep =(time:number)=> {
+  return new Promise((resolve) => setTimeout(resolve, time));
+}

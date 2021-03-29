@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>眼神跟着你走的可爱笑脸</title>
+	<script type="text/javascript">
+
+		function getTanDeg(tan) {
+	        var result = Math.atan(tan) / (Math.PI / 180);
+	        result = Math.round(result);
+	        return result;
+	    }
+		function GetAbsoluteLocation(element) { 
+			if ( arguments.length != 1 || element == null ) { 
+				return null; 
+			} 
+			var offsetTop = element.offsetTop; 
+			var offsetLeft = element.offsetLeft; 
+			var offsetWidth = element.offsetWidth; 
+			var offsetHeight = element.offsetHeight; 
+			while( element = element.offsetParent ) { 
+				offsetTop += element.offsetTop; 
+				offsetLeft += element.offsetLeft; 
+			} 
+			return { 
+				absoluteTop: offsetTop, 
+				absoluteLeft: offsetLeft, 
+				offsetWidth: offsetWidth,
+				offsetHeight: offsetHeight 
+			}; 
+		}
+		window.onload = function(){
+			document.querySelector("body").addEventListener("mousemove",function(e){
+				// console.log(e)
+				var bl = document.querySelectorAll("span");
+				// var bl=document.getElementsByTagName("span");
+				bl.forEach(function(bl) {
+					let x = e.clientX-GetAbsoluteLocation(bl).absoluteLeft+GetAbsoluteLocation(bl).offsetWidth/2;
+					let y = e.clientY-GetAbsoluteLocation(bl).absoluteTop;
+					let radian=getTanDeg(y/x)
+					if(x>0 &&y>0){
+						
+					}
+					else if(x<=0 &&y>0){
+						radian=radian+180
+					}
+					else if(x<=0 &&y<=0){
+						radian=radian+180
+					}
+					else if(x>=0 &&y<=0){
+						radian=radian+360
+					}
+                    bl.style.transform="rotate("+radian+"deg)";
+                })
+		    })
+	    }
+
+
+		</script>
+		<style>
+			*{
+				padding: 0;
+				margin: 0;
+			}
+
+			body{
+
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				min-height: 100vh;
+			}
+
+			.frame{
+				position: relative;
+				width: 200px;
+				height: 200px;
+				border-radius: 50%;
+				background:#ffcd00;
+				display: flex;
+				justify-content: center;
+			}
+
+			.frame:hover:before{
+				content: "";
+				position:absolute;
+				background: #b57700;
+				left:50px;
+				top:130px;
+				width: 100px;
+				height: 20px;
+
+				border-bottom-left-radius: 0px;
+				border-bottom-right-radius: 0px;
+			}
+
+			.frame:before{
+				content: "";
+				position:absolute;
+				background: #b57700;
+				left:50px;
+				top:110px;
+				width: 100px;
+				height: 50px;
+				transition: 0.5s;
+				border-bottom-left-radius: 70px;
+				border-bottom-right-radius: 70px;
+			}
+			
+			.eyes{
+				position: absolute;
+				top:40px;
+				width: 140px;
+				height: 50px;
+
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+			}
+
+			.eye{
+
+				position: relative;
+				width: 50px;
+				height: 50px;
+				border-radius: 50%;
+				background: white;
+			}
+
+			.bl{
+				display: block;
+				position: absolute;
+				top: 13px;
+				left:24px;
+				width: 25px;
+				height: 25px;
+
+				border-radius: 50%;
+				background: #000000;
+				transform-origin: -2px 50%;
+			}
+			
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<div class="frame">
+				<div class="eyes">
+					<div class="eye">
+						<span class="bl"></span>
+					</div>
+					<div class="eye">
+						<span class="bl"></span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

@@ -7,13 +7,22 @@ import { Dropdown, Menu } from "antd";
 import "../mock/login";
 import { Link, useHistory } from "react-router-dom";
 import { Axios, myHttp } from "../api";
+import { sleep } from "../utils";
+import { CrecodeSearch } from "./common/crecode-search";
+const { SubMenu } = Menu;
 const Header = (props: any) => {
-  const history =useHistory()
+  const history = useHistory();
   const [bodyWidth] = useAdapt();
   const { dispatch, defaultState } = useContext(DefalutContext) as any;
   const { router_index, loginUser, isLogin } = defaultState;
   const [idx, setIdx] = useState<number>(-1);
+  const [menuCurrent, setMenuCurrent] = useState<string>("主页");
+  const [menuVisible,setMenuVisible]=useState<boolean>(false);
+  const [menuClass,setMenuClass]=useState<string>('menu')
   // const router = useRouter()
+  const menuClick = (e: any) => {
+    setMenuCurrent(e.key);
+  };
   const toHome = (e: any) => {
     e.preventDefault();
     // router.push('/')
@@ -27,7 +36,7 @@ const Header = (props: any) => {
   };
   const tologin = () => {
     dispatch(requestUser());
-    myHttp.get(`/user/login?open_id=1`).then((data:any) => {
+    myHttp.get(`/user/login?open_id=1`).then((data: any) => {
       dispatch(receiveUser(data.result));
     });
   };
@@ -119,7 +128,7 @@ const Header = (props: any) => {
               <Dropdown overlay={loginMenu}>
                 <img
                   className="qqLogin"
-                  src={'/jay1.jpeg'||loginUser.head_portrait}
+                  src={"/jay1.jpeg" || loginUser.head_portrait}
                   onClick={() => {
                     tologin();
                   }}
@@ -137,8 +146,59 @@ const Header = (props: any) => {
           </div>
         </>
       ) : (
-        ""
+        <div className="menu-container">
+          <div className="menu-header">
+            <span className="logo">CreCode</span>
+            <svg
+              style={{
+                transform:`rotate(${menuVisible?'0':'45deg'})`
+              }}
+              className="menu-icon"
+              onClick={async()=>{
+                if(menuVisible===true){
+                 setMenuClass('menu menu-disappear')
+                 await sleep(500)
+                }else{
+                  setMenuClass('menu ')
+                }
+                setMenuVisible((visible)=>{
+                  return !visible
+                })
+              }}
+              viewBox="0 0 1024 1024"
+              version="1.1"
+              xmlns="http://www.w3.org/2000/svg"
+              p-id="2807"
+              width="40"
+              height="40"
+            >
+              <path
+                d="M384 480H192c-52.8 0-96-43.2-96-96V192c0-52.8 43.2-96 96-96h192c52.8 0 96 43.2 96 96v192c0 52.8-43.2 96-96 96zM192 160c-17.6 0-32 14.4-32 32v192c0 17.6 14.4 32 32 32h192c17.6 0 32-14.4 32-32V192c0-17.6-14.4-32-32-32H192zM832 480H640c-52.8 0-96-43.2-96-96V192c0-52.8 43.2-96 96-96h192c52.8 0 96 43.2 96 96v192c0 52.8-43.2 96-96 96zM640 160c-17.6 0-32 14.4-32 32v192c0 17.6 14.4 32 32 32h192c17.6 0 32-14.4 32-32V192c0-17.6-14.4-32-32-32H640zM384 928H192c-52.8 0-96-43.2-96-96V640c0-52.8 43.2-96 96-96h192c52.8 0 96 43.2 96 96v192c0 52.8-43.2 96-96 96zM192 608c-17.6 0-32 14.4-32 32v192c0 17.6 14.4 32 32 32h192c17.6 0 32-14.4 32-32V640c0-17.6-14.4-32-32-32H192zM832 928H640c-52.8 0-96-43.2-96-96V640c0-52.8 43.2-96 96-96h192c52.8 0 96 43.2 96 96v192c0 52.8-43.2 96-96 96zM640 608c-17.6 0-32 14.4-32 32v192c0 17.6 14.4 32 32 32h192c17.6 0 32-14.4 32-32V640c0-17.6-14.4-32-32-32H640z"
+                p-id="2808"
+                fill="#409EFF"
+              ></path>
+            </svg>
+          </div>
+          <Menu
+            className={menuClass}
+            style={{ width: "100%",display:menuVisible?'block':'none' }}
+            onClick={menuClick}
+            selectedKeys={[menuCurrent]}
+            mode="vertical"
+          >
+            {labelRouters.map((labelRouter) => (
+              <Menu.Item key={labelRouter.name}>
+                <Link to={{ pathname: labelRouter.value }}>
+                  {labelRouter.name}
+                </Link>
+              </Menu.Item>
+            ))}
+             
+          </Menu>
+         
+        </div>
       )}
+      {/* <CrecodeSearch></CrecodeSearch> */}
     </div>
   );
 };

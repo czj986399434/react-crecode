@@ -1,85 +1,130 @@
-$blue:#409EFF;
+$blue: #409eff;
 
 .main-header {
-    height: 70px;
-    
-    background: #ffffff;
+  height: 70px;
+  background: #ffffff;
+
+  box-sizing: border-box;
+  // padding:0 20px;
+  line-height: 70px;
+  // display: flex;
+  // align-items: center;
+  // justify-content: space-between;
+  border-bottom: 1px solid #f1f1f1;
+  .middle {
+    margin: 0 auto;
+    max-width: 1000px;
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .labels {
+    display: inline-flex;
+    align-items: flex-end;
+  }
+
+  .label {
+    padding: 0 10px;
     box-sizing: border-box;
-    padding:0 20px;
-    line-height: 70px;
-    // display: flex;
-    // align-items: center;
-    // justify-content: space-between;
-    border-bottom: 1px solid #f1f1f1;
-    .middle{
-        margin: 0 auto;
-        max-width: 1000px;
-        position: relative;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-    .labels {
-        display: inline-flex;
-        align-items: flex-end;
-    }
+    cursor: pointer;
+    width: 7rem;
+    height: 3rem;
+    text-align: center;
+    line-height: 3rem;
+    color: #a0cfff;
+    font-size: 16px;
+  }
 
-    .label {
-        padding: 0 10px;
-        box-sizing: border-box;
-        cursor: pointer;
-        width: 7rem;
-        height: 3rem;
-        text-align: center;
-        line-height: 3rem;
-        color: #a0cfff;
-        font-size: 16px;
-    }
+  .logo {
+    font-size: 40px;
+    color: $blue;
+    cursor: pointer;
+    // position: absolute;
+    // left:0px;
+    // top:50%;
+    // transform: translate(0,-50%);
+  }
 
-    .logo {
-        font-size: 40px;
-        color: $blue;
-        cursor: pointer;
-        // position: absolute;
-        // left:0px;
-        // top:50%;
-        // transform: translate(0,-50%);
-    }
+  .box-highlight {
+    width: 0px;
+    transition: all 1s;
+    height: 2px;
+    background: $blue;
+    transform: translate(-10px, 0);
+  }
 
-    .box-highlight {
-        width: 0px;
-        transition: all 1s;
-        height: 2px;
-        background: $blue;
-        transform: translate(-10px, 0);
-    }
+  .label:hover {
+    color: $blue;
+  }
+  .label-highlight {
+    color: $blue;
+  }
+  .qqLogin {
+    cursor: pointer;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    // position: absolute;
+    // right:0px;
+    // top:50%;
+    // transform: translate(0,-50%);
+  }
 
-    .label:hover {
-        color: $blue
-    }
-    .label-highlight{
-        color:$blue
-    }
-    .qqLogin {
-        cursor: pointer;
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        object-fit: cover;
-        // position: absolute;
-        // right:0px;
-        // top:50%;
-        // transform: translate(0,-50%);
-    }
-
-    .motto {
-        font-size: 12px;
-        color:$blue;
-        transition: 0.5s all;
-        display: inline-block;
-        overflow:hidden;
-	text-overflow:ellipsis;
-	white-space:nowrap;
+  .motto {
+    font-size: 12px;
+    color: $blue;
+    transition: 0.5s all;
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     flex-shrink: 1;
+  }
+  .menu-container {
+  }
+  .menu {
+    animation: slideTop 1s;
+  }
+  .menu-header {
+    margin: 0;
+    background: #fff;
+    box-sizing: border-box;
+    padding: 0 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .logo {
+      font-size: 40px;
+      color: $blue;
     }
+    .menu-icon {
+      transition: all 1s;
+    }
+   
+  }
+  .menu-disappear{
+     animation:slideTopNone 1s forwards
+  }
+  @keyframes slideTop {
+    0% {
+      transform: translateY(-30%);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0%);
+      opacity: 1;
+    }
+  }
+  @keyframes slideTopNone {
+    0% {
+        transform: translateY(0%);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-30%);
+        opacity: 0;
+      }
+  }
 }

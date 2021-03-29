@@ -1,55 +1,58 @@
 .creative-workshop {
-    background: #fff;
+  background: linear-gradient(to right bottom,#FFF9C4,#F0F4C3,#DCEDC8,#C8E6C9,#B2DFDB,#B2EBF2,#B3E5FC,#BBDEFB);
+  
+  .pageination {
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+  }
 
-    .pageination {
-        margin: 0 auto;
-        display: flex;
-        justify-content: center;
+  .show-card {
+    transition: 0.5s;
+    margin: 20px 20px;
+    padding: 20px;
+    // min-height: 200px;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    background: url("../../public/creative-workshop.jpg") no-repeat;
+    background-size: 100% 100%;
+    background-attachment: fixed !important;
+    opacity: 0.8;
+    transition: "all 1s";
+  }
 
-    }
+  .show-card:hover {
+    box-shadow: 3px 3px 3px 3px #ccc;
+  }
 
-    .show-card {
-        transition: .5s;
-        margin: 20px 20px;
-        padding: 20px;
-        // min-height: 200px;
-        border: 1px solid #ccc;
-        border-radius: 12px;
-        display: inline-flex;
-        flex-direction: column;
-        align-items: center;
-        
+  .icon {
+    height: 30px;
+    margin: 0 20px;
+    cursor: pointer;
+  }
+  .hover-buttons {
+    margin-top: 20px;
+    height: 30px;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    // background: #afafaf;
+  }
+  .code-display {
+    width: 100%;
+    transition: all 0.5s;
+    span {
+      display: inline-block;
+      margin: 0 auto;
     }
-
-    .show-card:hover {
-        box-shadow: 3px 3px 3px 3px #ccc;
-        
-    }
-
-    .icon {
-        height: 30px;
-        margin: 0 20px;
-        cursor: pointer;
-    }
-    .hover-buttons{
-        margin-top:20px;
-        height:30px;
-        width: 100%;
-        box-sizing: border-box;
-        padding:0 20px;
-        display: flex;
-        align-items: center;
-        justify-content:center
-    }
-    .code-display{
-        width: 100%;
-        transition:all .5s;
-        span{
-            display: inline-block;
-            margin:0 auto;
-        }
-    }
-    .code-display:hover{
-        background: #F4F5F7;
-    }
+  }
+  .code-display:hover {
+    background: #f4f5f7;
+  }
 }
