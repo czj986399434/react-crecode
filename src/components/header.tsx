@@ -198,7 +198,7 @@ const Header = (props: any) => {
          
         </div>
       )}
-      {/* <CrecodeSearch></CrecodeSearch> */}
+      <CrecodeSearch></CrecodeSearch>
     </div>
   );
 };
