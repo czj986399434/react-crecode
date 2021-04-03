@@ -1,0 +1,38 @@
+.index-nav{
+    background: url(https://www.ambitionlt.net/img/syy.b5977ed4.jpg) no-repeat;
+    background-size: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: fangsong;
+    color: #fff;
+    width: 100%;
+    height: 730px;
+    font-size: 20px;
+    overflow: hidden;
+}
+.motto{
+    position: relative;
+}
+.motto::before{
+   position:absolute;
+   content: '';
+   left: 0px;
+   top:0px;
+   width: 2px;
+   background:#fff;
+   height: 1em;
+   animation:leftSlide 1.3s cubic-bezier(.68,-.55,.265,1.5) forwards
+}
+.motto::after{
+    position:absolute;
+   content: '';
+   right: 0px;
+   width: 2px;
+   background:#fff;
+   height: 1em;
+   top:0px;
+}
+@keyframes leftSlide{
+
+}

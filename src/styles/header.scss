@@ -83,6 +83,7 @@ $blue: #409eff;
     flex-shrink: 1;
   }
   .menu-container {
+    background:transparent
   }
   .menu {
     animation: slideTop 1s;
@@ -107,6 +108,7 @@ $blue: #409eff;
   .menu-disappear{
      animation:slideTopNone 1s forwards
   }
+  
   @keyframes slideTop {
     0% {
       transform: translateY(-30%);
@@ -126,5 +128,15 @@ $blue: #409eff;
         transform: translateY(-30%);
         opacity: 0;
       }
+  }
+}
+.index-header{
+  background: transparent  !important;
+  position:absolute;
+  top:0;
+  width: 100%;
+  border-bottom:0px ;
+  .color-white{
+    color:#fff !important
   }
 }

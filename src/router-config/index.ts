@@ -1,4 +1,5 @@
 import Blog from "../pages/blog/index";
+import BlogList from '../pages/blog/blog-list'
 import Article from "../pages/blog/article";
 import CreativeWorkshop from "../pages/creative-workshop/index";
 import Create from "../pages/creative-workshop/create";
@@ -42,6 +43,10 @@ const routes = [
     path: "/",
     component: Index,
     routes: [
+      {
+        path:'/blog-list',
+        component:BlogList
+      },
       {
         path: "/blog",
         component: Blog,

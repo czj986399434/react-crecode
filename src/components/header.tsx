@@ -17,8 +17,8 @@ const Header = (props: any) => {
   const { router_index, loginUser, isLogin } = defaultState;
   const [idx, setIdx] = useState<number>(-1);
   const [menuCurrent, setMenuCurrent] = useState<string>("主页");
-  const [menuVisible,setMenuVisible]=useState<boolean>(false);
-  const [menuClass,setMenuClass]=useState<string>('menu')
+  const [menuVisible, setMenuVisible] = useState<boolean>(false);
+  const [menuClass, setMenuClass] = useState<string>("menu");
   // const router = useRouter()
   const menuClick = (e: any) => {
     setMenuCurrent(e.key);
@@ -76,13 +76,13 @@ const Header = (props: any) => {
     []
   );
   return (
-    <div className="main-header">
+    <div className={props.index ? "main-header index-header" : "main-header"}>
       {bodyWidth >= 800 ? (
         //响应式布局
         <>
           <div className="middle">
             <span
-              className="logo"
+              className={props.index?'logo color-white':"logo"}
               onClick={(e) => {
                 toHome(e);
               }}
@@ -90,39 +90,43 @@ const Header = (props: any) => {
               CreCode
             </span>
             <span
-              className="motto"
+              className={"motto"}
               style={{
                 opacity: bodyWidth > 1200 ? "1" : "0",
+                display:props.index?'none':'inline'
               }}
             >
               青春是一个短暂的美梦, 当你醒来时, 它早已消失无踪
             </span>
-            <div className="labels">
-              {labelRouters.map((router, index) => (
-                <Link to={router.value} key={router.name}>
-                  <div
-                    className={
-                      router_index === index ? "label label-highlight" : "label"
-                    }
-                    onClick={() => {
-                      console.log("index" + index);
-                      link(index);
-                    }}
-                    onMouseOver={() => {
-                      highlight("on", index);
-                    }}
-                    onMouseOut={() => {
-                      highlight("off", index);
-                    }}
-                  >
-                    {router.name}
+            <div className={"labels"}>
+              {labelRouters.map((router, index) => {
+                let classN = ["label"];
+                if (router_index === index) classN.push("label-highlight");
+                if (props.index) classN.push("color-white");
+                return (
+                  <Link to={router.value} key={router.name}>
                     <div
-                      className="box-highlight"
-                      style={{ width: idx === index ? "7rem" : "0" }}
-                    ></div>
-                  </div>
-                </Link>
-              ))}
+                      className={classN.join(" ")}
+                      onClick={() => {
+                        console.log("index" + index);
+                        link(index);
+                      }}
+                      onMouseOver={() => {
+                        highlight("on", index);
+                      }}
+                      onMouseOut={() => {
+                        highlight("off", index);
+                      }}
+                    >
+                      {router.name}
+                      <div
+                        className="box-highlight"
+                        style={{ width: idx === index ? "7rem" : "0" }}
+                      ></div>
+                    </div>
+                  </Link>
+                );
+              })}
             </div>
             {isLogin ? (
               <Dropdown overlay={loginMenu}>
@@ -146,24 +150,25 @@ const Header = (props: any) => {
           </div>
         </>
       ) : (
-        <div className="menu-container">
-          <div className="menu-header">
-            <span className="logo">CreCode</span>
+        <div className="menu-container" >
+          <div className={props.index?'menu-header index-header':"menu-header"}>
+            <span className={props.index?'logo color-white':"logo"}>CreCode</span>
             <svg
               style={{
-                transform:`rotate(${menuVisible?'0':'45deg'})`
+                transform: `rotate(${menuVisible ? "0" : "45deg"})`,
+                zIndex:1
               }}
               className="menu-icon"
-              onClick={async()=>{
-                if(menuVisible===true){
-                 setMenuClass('menu menu-disappear')
-                 await sleep(500)
-                }else{
-                  setMenuClass('menu ')
+              onClick={async () => {
+                if (menuVisible === true) {
+                  setMenuClass("menu menu-disappear");
+                  await sleep(500);
+                } else {
+                  setMenuClass("menu ");
                 }
-                setMenuVisible((visible)=>{
-                  return !visible
-                })
+                setMenuVisible((visible) => {
+                  return !visible;
+                });
               }}
               viewBox="0 0 1024 1024"
               version="1.1"
@@ -175,13 +180,13 @@ const Header = (props: any) => {
               <path
                 d="M384 480H192c-52.8 0-96-43.2-96-96V192c0-52.8 43.2-96 96-96h192c52.8 0 96 43.2 96 96v192c0 52.8-43.2 96-96 96zM192 160c-17.6 0-32 14.4-32 32v192c0 17.6 14.4 32 32 32h192c17.6 0 32-14.4 32-32V192c0-17.6-14.4-32-32-32H192zM832 480H640c-52.8 0-96-43.2-96-96V192c0-52.8 43.2-96 96-96h192c52.8 0 96 43.2 96 96v192c0 52.8-43.2 96-96 96zM640 160c-17.6 0-32 14.4-32 32v192c0 17.6 14.4 32 32 32h192c17.6 0 32-14.4 32-32V192c0-17.6-14.4-32-32-32H640zM384 928H192c-52.8 0-96-43.2-96-96V640c0-52.8 43.2-96 96-96h192c52.8 0 96 43.2 96 96v192c0 52.8-43.2 96-96 96zM192 608c-17.6 0-32 14.4-32 32v192c0 17.6 14.4 32 32 32h192c17.6 0 32-14.4 32-32V640c0-17.6-14.4-32-32-32H192zM832 928H640c-52.8 0-96-43.2-96-96V640c0-52.8 43.2-96 96-96h192c52.8 0 96 43.2 96 96v192c0 52.8-43.2 96-96 96zM640 608c-17.6 0-32 14.4-32 32v192c0 17.6 14.4 32 32 32h192c17.6 0 32-14.4 32-32V640c0-17.6-14.4-32-32-32H640z"
                 p-id="2808"
-                fill="#409EFF"
+                fill={props.index?'#fff':"#409EFF"}
               ></path>
             </svg>
           </div>
           <Menu
             className={menuClass}
-            style={{ width: "100%",display:menuVisible?'block':'none' }}
+            style={{ width: "100%", display: menuVisible ? "block" : "none" }}
             onClick={menuClick}
             selectedKeys={[menuCurrent]}
             mode="vertical"
@@ -193,9 +198,7 @@ const Header = (props: any) => {
                 </Link>
               </Menu.Item>
             ))}
-             
           </Menu>
-         
         </div>
       )}
       <CrecodeSearch></CrecodeSearch>

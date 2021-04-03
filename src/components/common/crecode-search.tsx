@@ -71,36 +71,37 @@ interface SearchResultProps {
 }
 const { TabPane } = Tabs;
 const SearchResult = (props: SearchResultProps) => {
-  const [visible,setVisible]=useState<boolean>(false)
-  const { searchValue,inputVisible } = props;
+  const [visible, setVisible] = useState<boolean>(false);
+  const { searchValue, inputVisible } = props;
   const [leftVisible, setLeftVisible] = useState<boolean>(false);
   const [activeKey, setActiveKey] = useState<string>("a");
   const [blogSearch, setBlogSearch] = useState<any[]>([]);
   const [userSearch, setUserSearch] = useState<any[]>([]);
   const [diarySearch, setDiarySearch] = useState<any[]>([]);
   useEffect(() => {
-    myHttp
-      .get("/search", {
-        word: searchValue,
-      })
-      .then((data: any) => {
-        const { result } = data;
-        setBlogSearch(result.blogSearch);
-        setDiarySearch(result.diarySearch);
-        setUserSearch(result.userSearch);
-      });
+    if (searchValue.indexOf("'") === -1)
+      myHttp
+        .get("/search", {
+          word: searchValue,
+        })
+        .then((data: any) => {
+          const { result } = data;
+          setBlogSearch(result.blogSearch);
+          setDiarySearch(result.diarySearch);
+          setUserSearch(result.userSearch);
+        });
   }, [searchValue]);
-  const boxStyle=useMemo(() => {
-     if(inputVisible===true)
-       return style["search-result"]+' '+style['appear']
-     else return style["search-result"]+' '+style['disappear']
+  const boxStyle = useMemo(() => {
+    if (inputVisible === true)
+      return style["search-result"] + " " + style["appear"];
+    else return style["search-result"] + " " + style["disappear"];
   }, [inputVisible]);
   useEffect(() => {
-    if(inputVisible===true) setVisible(true)
-    else{
-      setTimeout(()=>{
-        setVisible(false)
-     },800)
+    if (inputVisible === true) setVisible(true);
+    else {
+      setTimeout(() => {
+        setVisible(false);
+      }, 800);
     }
   }, [inputVisible]);
   const hasDataBool = useMemo(() => {
@@ -114,7 +115,11 @@ const SearchResult = (props: SearchResultProps) => {
   return (
     <div
       className={boxStyle}
-      style={{ ...props.style, width: hasDataBool ? 400 : 260,display:visible?'block':'none' }}
+      style={{
+        ...props.style,
+        width: hasDataBool ? 400 : 260,
+        display: visible ? "block" : "none",
+      }}
     >
       <Tabs
         activeKey={activeKey}
@@ -140,7 +145,7 @@ const SearchResult = (props: SearchResultProps) => {
           </div>
         )}
         className={style["tab-left"]}
-        style={{ minHeight: 220 }}
+        style={{ minHeight: 220, maxHeight: 500, overflow: "auto" }}
       >
         <TabPane
           key="a"
@@ -197,7 +202,52 @@ const SearchResult = (props: SearchResultProps) => {
               <span className={style["left-text"]}>博客</span>
             </div>
           }
-        ></TabPane>
+        >
+          <List
+            itemLayout="horizontal"
+            dataSource={blogSearch}
+            renderItem={(blog) => {
+              const blogTitle = blog.title as string;
+              const titleHtml = blogTitle.replace(
+                searchValue,
+                `<strong>${searchValue}</strong>`
+              );
+              const titleValue = (
+                <div dangerouslySetInnerHTML={{ __html: titleHtml }}></div>
+              );
+              const blogContent = blog.content as string;
+              const contentHtml = blogContent.replace(
+                searchValue,
+                `<strong>${searchValue}</strong>`
+              );
+              const contentValue = (
+                <div dangerouslySetInnerHTML={{ __html: contentHtml }}></div>
+              );
+              return (
+                <List.Item>
+                  <List.Item.Meta
+                    avatar={
+                      <img
+                        src="/jay1.jpeg"
+                        style={{ width: "30px", objectFit: "cover" }}
+                      ></img>
+                    }
+                    title={
+                      <a
+                        href={`/blog/article?blog_id=${blog.blog_id}`}
+                        rel="noreferrer"
+                        target="_blank"
+                      >
+                        {titleValue}
+                      </a>
+                    }
+                    description={contentValue}
+                  />
+                </List.Item>
+              );
+            }}
+          />
+        </TabPane>
         <TabPane
           key="3"
           tab={
@@ -219,7 +269,44 @@ const SearchResult = (props: SearchResultProps) => {
               <span className={style["left-text"]}>日志</span>
             </div>
           }
-        ></TabPane>
+        >
+          <List
+            itemLayout="horizontal"
+            dataSource={diarySearch}
+            renderItem={(diary) => {
+              const diaryTitle = diary.title as string;
+              const abstractHtml = diaryTitle.replace(
+                searchValue,
+                `<strong>${searchValue}</strong>`
+              );
+              const abstractValue = (
+                <div dangerouslySetInnerHTML={{ __html: abstractHtml }}></div>
+              );
+
+              return (
+                <List.Item>
+                  <List.Item.Meta
+                    avatar={
+                      <img
+                        src={diary.user.head_portrait}
+                        style={{ width: "30px", objectFit: "cover" }}
+                      ></img>
+                    }
+                    title={
+                      <a
+                        href={`/space?user_id=${diary.user.user_id}`}
+                        rel="noreferrer"
+                        target="_blank"
+                      >
+                        {abstractValue}
+                      </a>
+                    }
+                  />
+                </List.Item>
+              );
+            }}
+          />
+        </TabPane>
       </Tabs>
     </div>
   );

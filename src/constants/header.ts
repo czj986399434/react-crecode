@@ -3,7 +3,7 @@ export const labelRouters=[{
     value:'/',
 },{
     name:'博客中心',
-    value:'/blog'
+    value:'/blog-list'
 },{
     name:'个人空间',
     value:'/space'
