@@ -1,38 +1,136 @@
-.index-nav{
-    background: url(https://www.ambitionlt.net/img/syy.b5977ed4.jpg) no-repeat;
-    background-size: cover;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: fangsong;
-    color: #fff;
-    width: 100%;
-    height: 730px;
-    font-size: 20px;
-    overflow: hidden;
+.index-nav {
+  background: url(https://www.ambitionlt.net/img/syy.b5977ed4.jpg) no-repeat;
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: fangsong;
+  color: #fff;
+  width: 100%;
+  height: 730px;
+  font-size: 20px;
+  overflow: hidden;
 }
-.motto{
-    position: relative;
+.motto {
+  position: relative;
+  text-align: center;
 }
-.motto::before{
-   position:absolute;
-   content: '';
-   left: 0px;
-   top:0px;
-   width: 2px;
-   background:#fff;
-   height: 1em;
-   animation:leftSlide 1.3s cubic-bezier(.68,-.55,.265,1.5) forwards
+.motto::before {
+  position: absolute;
+  content: "";
+  left: -50px;
+  top: 0px;
+  width: 2px;
+  background: #fff;
+  height: 1.3em;
+  animation: leftSlide 3s forwards;
 }
-.motto::after{
-    position:absolute;
-   content: '';
-   right: 0px;
-   width: 2px;
-   background:#fff;
-   height: 1em;
-   top:0px;
+.motto::after {
+  position: absolute;
+  content: "";
+  right: -50px;
+  width: 2px;
+  background: #fff;
+  height: 1.3em;
+  top: 0px;
+  animation: rightSlide 3s forwards;
 }
-@keyframes leftSlide{
+.arrow-down {
+  position: absolute;
+  bottom: 100px;
+  left: 50%;
+  transform: translate(-50%);
+  color: #fff;
+  font-size: 30px;
+  cursor: pointer;
+}
+.middle-container {
+  padding: 40px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+}
+.middle {
+  display: inline-flex;
 
+  align-items: center;
+  justify-content: center;
+}
+.middle-card {
+  
+  height: 500px;
+  width: 400px;
+  background: #fff;
+  margin: 20px;
+  position: relative;
+  transition: all 1s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
+}
+.middle-card:nth-of-type(2){
+    box-sizing: border-box;
+    padding:50px 20px;
+}
+.display-flex-column{
+    display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.font-weight-fold {
+  font-weight: 700;
+}
+.font-size-big {
+  font-size: 40px;
+}
+.font-size-middle {
+  font-size: 30px;
+}
+.font-size-small{
+   font-size:20px
+}
+.ani-appear {
+  animation: word-appear 1s;
+}
+.text-indent-two{
+    text-indent:2em
+}
+@keyframes word-appear {
+  0% {
+    opacity: 0;
+    transform: translate(0, -100px);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+}
+@keyframes leftSlide {
+  0% {
+    opacity: 0;
+  }
+  40% {
+    opacity: 1;
+    transform: scale(0.8) translate(20px);
+  }
+  70% {
+    transform: scale(1.2) translate(-20px);
+  }
+  100% {
+    transform: scale(1) translate(0px);
+  }
+}
+@keyframes rightSlide {
+  0% {
+    opacity: 0;
+  }
+  40% {
+    opacity: 1;
+    transform: scale(0.8) translate(-20px);
+  }
+  70% {
+    transform: scale(1.2) translate(20px);
+  }
+  100% {
+    transform: scale(1) translate(0px);
+  }
 }
