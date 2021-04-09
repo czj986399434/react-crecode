@@ -3,7 +3,16 @@ import Diary from "../../components/diary";
 import Picture from "../../components/picture-basic";
 import React, { useEffect, useState, useContext, useRef } from "react";
 import { DefalutContext } from "../../App";
-import { Button, Checkbox, Form, Input, Popover, Select } from "antd";
+import {
+  Button,
+  Checkbox,
+  Form,
+  Input,
+  Popconfirm,
+  Popover,
+  Select,
+  Tooltip,
+} from "antd";
 import SpaceBlog from "../../components/space-blog";
 import { useLocationParams } from "../../utils/location-params-hooks";
 import { PlusOutlined } from "@ant-design/icons";
@@ -33,35 +42,38 @@ const Space = (props: any) => {
   };
 
   const {
-    defaultState: { loginUser,loading },
+    defaultState: { loginUser, loading },
     dispatch,
   } = useContext(DefalutContext) as any;
   const [displayType, setDisplayType] = useState<DisplayType>("blog");
   const [pictureDisplay, setPictureDisplay] = useState("basic");
-  const [popVisible,setPopVisible]=useState<boolean>(false)
-  const handleVisibleChange=(visible:any)=>{
-         setPopVisible(visible)
-  }
-  const addDiary=(values:any)=>{
-    dispatch(startLoading())
-    myHttp.post('/diary/add',{
-      ...values,
-      mood:'',
-      user_id:loginUser.user_id
-    }).then(()=>{
-      dispatch(endLoading())
-      setPopVisible(false)
-    }).catch(()=>{
-      dispatch(endLoading())
-      setPopVisible(false)
-    })
-  }
+  const [popVisible, setPopVisible] = useState<boolean>(false);
+  const handleVisibleChange = (visible: any) => {
+    setPopVisible(visible);
+  };
+  const addDiary = (values: any) => {
+    dispatch(startLoading());
+    myHttp
+      .post("/diary/add", {
+        ...values,
+        mood: "",
+        user_id: loginUser.user_id,
+      })
+      .then(() => {
+        dispatch(endLoading());
+        setPopVisible(false);
+      })
+      .catch(() => {
+        dispatch(endLoading());
+        setPopVisible(false);
+      });
+  };
   const diaryAddContent = (
     <Form
-    style={{
-      width:'500px',
-    }}
-    {...layout}
+      style={{
+        width: "500px",
+      }}
+      {...layout}
       name="basic"
       initialValues={{ remember: true }}
       onFinish={addDiary}
@@ -79,14 +91,14 @@ const Space = (props: any) => {
         name="content"
         rules={[{ required: true, message: "无内容?那你写啥日记(doge)" }]}
       >
-        <TextArea rows={7} maxLength={1000} showCount/>
+        <TextArea rows={7} maxLength={1000} showCount />
       </Form.Item>
-      <Form.Item  name="open" valuePropName="open" {...tailLayout}>
+      <Form.Item name="open" valuePropName="open" {...tailLayout}>
         <Checkbox>是否公开</Checkbox>
       </Form.Item>
       <Form.Item {...tailLayout}>
         <Button type="primary" htmlType="submit" loading={loading}>
-           添加
+          添加
         </Button>
       </Form.Item>
     </Form>
@@ -116,7 +128,7 @@ const Space = (props: any) => {
         </>
       );
   }
-  
+
   return (
     <Layout>
       <div className="space">
@@ -165,9 +177,25 @@ const Space = (props: any) => {
           </div>
           {displayType === "diary" && (
             <div>
-              <Popover visible={popVisible} onVisibleChange={handleVisibleChange} content={diaryAddContent} title="日志添加" placement="rightTop" trigger="click">
+              <Popover
+                visible={popVisible}
+                onVisibleChange={handleVisibleChange}
+                content={diaryAddContent}
+                title="日志添加"
+                placement="rightTop"
+                trigger="click"
+              >
                 <PlusOutlined />
               </Popover>
+            </div>
+          )}
+          {displayType === "blog" && (
+            <div>
+              <Tooltip title="写博客">
+                <a href="/blog/index" rel="noreferrer">
+                  <PlusOutlined />
+                </a>
+              </Tooltip>
             </div>
           )}
         </div>

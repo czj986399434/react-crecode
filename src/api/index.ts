@@ -7,7 +7,7 @@ const successCodeReg = /^20/g;
 // Axios.interceptors.request.use()
 Axios.interceptors.response.use(
   (response) => {
-    console.log(response.status.toString())
+    // console.log(response.status.toString())
     if (successCodeReg.test(response.status.toString())||response.status.toString()==='304') {
       response.data.message
         ? console.log(response.data.message)
@@ -54,9 +54,9 @@ function get(url: string, params = {}) {
  * @param {object} data  请求体
  * @return {*}
  */
-function post(url: string, data: object) {
+function post(url: string, data: object,config?:object) {
   return new Promise((resolve, reject) => {
-    Axios.post(url, data).then(
+    Axios.post(url, data,config).then(
       (response) => {
         //关闭进度条
         resolve(response.data);

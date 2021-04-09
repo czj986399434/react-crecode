@@ -17,7 +17,7 @@ export const LoadingBottom = () => {
           </div>
         </div>
       </div>
-      <strong>到底了...</strong>
+      <strong>我也是有极限的...</strong>
     </div>
   );
 };

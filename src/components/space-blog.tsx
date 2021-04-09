@@ -36,7 +36,7 @@ const SpaceBlog = (props: any) => {
   };
   const toEdit = (blog_id: number) => {
     console.log('toEdit')
-      history.push(`/blog?blog_id=${blog_id}`)
+      history.push(`/blog/index?blog_id=${blog_id}`)
   };
   useEffect(() => {
     dispatch(startLoading());
@@ -80,7 +80,7 @@ const SpaceBlog = (props: any) => {
                 <span className="year">{dateArr[0]}</span>
               </div>
               <div className="content-container">
-                <img className="content-image" src={blog.coverImage} />
+                <img className="content-image" src={blog.coverImage===''?'jay1.jpeg':`http://qiniu.crecode.cn/${blog.coverImage}`} />
                 <div
                   className="content"
                   dangerouslySetInnerHTML={{ __html: blog.content }}

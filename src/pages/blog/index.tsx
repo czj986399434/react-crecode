@@ -82,7 +82,7 @@ const Submit = (props: any) => {
 };
 let editor = null as any;
 const Blog = (props: any) => {
-  const history =useHistory()
+  const history = useHistory();
   const [chooseTags, setChooseTags] = useState<any[]>(
     new Array(defaultTags.length)
   );
@@ -105,42 +105,44 @@ const Blog = (props: any) => {
     dispatch(startLoading());
     const blog_id = locationParams.blog_id || blogData.blog_id;
     if (blog_id) {
-      myHttp.post("/blog/update", {
-        title,
-        content,
-        coverImage,
-        blog_id,
-        tags,
-      }).then((data)=>{
-        dispatch(endLoading());
-        dispatch(initialBlog());
-        setTimeout(() => {
-          // eslint-disable-next-line no-restricted-globals
-          history.goBack()
-        }, 1000);
-        setIsModalVisible(false);
-      });
-    }else{
       myHttp
-      .post("/blog/add", {
-        title,
-        tags,
-        content,
-        coverImage: "",
-        user_id: loginUser.user_id,
-      })
-      .then((data) => {
-        dispatch(endLoading());
-        dispatch(initialBlog());
-        setTimeout(() => {
-          // eslint-disable-next-line no-restricted-globals
-          location.reload();
-        }, 1000);
-        setIsModalVisible(false);
-      });
-  };
+        .post("/blog/update", {
+          title,
+          content,
+          coverImage,
+          blog_id,
+          tags,
+        })
+        .then((data) => {
+          dispatch(endLoading());
+          dispatch(initialBlog());
+          setTimeout(() => {
+            // eslint-disable-next-line no-restricted-globals
+            history.goBack();
+          }, 1000);
+          setIsModalVisible(false);
+        });
+    } else {
+      myHttp
+        .post("/blog/add", {
+          title,
+          tags,
+          content,
+          coverImage,
+          user_id: loginUser.user_id,
+        })
+        .then((data) => {
+          dispatch(endLoading());
+          dispatch(initialBlog());
+          setTimeout(() => {
+            // eslint-disable-next-line no-restricted-globals
+            location.reload();
+          }, 1000);
+          setIsModalVisible(false);
+        });
     }
-    
+  };
+
   const save = useCallback(() => {
     const saveData = {
       content,
@@ -222,14 +224,16 @@ const Blog = (props: any) => {
 
   const uploadCover = () => {
     const file = fileRef.current.files[0];
-    const reader = new FileReader();
-    // console.log("file");
-    // console.log(file);
-    // reader.readAsDataURL(file);
-    // reader.onload = function (e) {
-    //   console.log(this.result);
-    //   setCoverImage(this.result as string);
-    // };
+    if (file) {
+      const formData = new FormData();
+      formData.append("pic", file, file.name);
+      const config = {
+        headers: { "Content-Type": "mutipart/form-data" },
+      };
+      myHttp.post("/uploadPic", formData, config).then((data:any) => {
+        setCoverImage(data.result)
+      });
+    }
   };
   const clickUpload = () => {
     fileRef.current.click();
@@ -275,7 +279,9 @@ const Blog = (props: any) => {
                 name="coverImage"
                 ref={fileRef}
                 style={{ display: "none" }}
-                onClick={uploadCover}
+                onChange={(e)=>{
+                uploadCover()
+                }}
               ></input>
               <Tooltip title="封面">
                 <FileImageOutlined

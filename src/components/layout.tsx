@@ -7,7 +7,7 @@ type Props = {
 };
 
 const Layout = ({ children, title = "crecode" }: Props) => {
-  console.log(window.location)
+
   return (
     <div className={window.location.href==='http://localhost:3000/'?"layout-index":'layout'}>
       <header>

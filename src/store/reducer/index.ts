@@ -58,7 +58,7 @@ export const reducer = (state: any, action: any) => {
         loading: false,
       };
     case types.SAVE_BLOG:
-      console.log(action.blogData);
+      // console.log(action.blogData);
       return {
         ...state,
         blogData: action.blogData,

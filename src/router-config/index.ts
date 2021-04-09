@@ -48,11 +48,11 @@ const routes = [
         component:BlogList
       },
       {
-        path: "/blog",
+        path: "/blog/index",
         component: Blog,
         routes: [
           {
-            path: "article",
+            path: "/blog/article",
             component: Article,
           },
         ],
