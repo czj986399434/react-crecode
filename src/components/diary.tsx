@@ -346,6 +346,10 @@ const Diary = (props: DiaryProps) => {
   const { user_id } = props;
   const [cards, setCards] = useState<any>([]);
   const [refreshFlag, setRefreshFlag] = useState<boolean>(false);
+  const {
+    dispatch,
+    defaultState: { loginUser },
+  } = useContext(DefalutContext);
   const [showStoreList, setShowStoreList] = useState<any>(
     cards.map((card: any, index: any) => {
       return {
@@ -364,7 +368,12 @@ const Diary = (props: DiaryProps) => {
         user_id,
       })
       .then((data: any) => {
+        if(Number(user_id)===Number(loginUser.user_id))
         setCards(data.result.list);
+        else 
+        setCards(data.result.list.filter((item:any)=>{
+             return item.open.toString()==='1'
+        }))
       });
   }, [refreshFlag]);
   useEffect(() => {

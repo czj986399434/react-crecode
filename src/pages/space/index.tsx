@@ -1,6 +1,7 @@
 import Layout from "../../components/layout";
 import Diary from "../../components/diary";
-import Picture from "../../components/picture-basic";
+import PictureBasic from "../../components/picture-basic";
+import Picture3D from '../../components/picture3D'
 import React, { useEffect, useState, useContext, useRef } from "react";
 import { DefalutContext } from "../../App";
 import {
@@ -10,6 +11,7 @@ import {
   Input,
   Popconfirm,
   Popover,
+  Radio,
   Select,
   Tooltip,
 } from "antd";
@@ -19,6 +21,7 @@ import { PlusOutlined } from "@ant-design/icons";
 import { myHttp } from "../../api";
 import { endLoading, startLoading } from "../../store/action/loading";
 type DisplayType = "blog" | "diary" | "picture";
+type PictureType = "normal" | "3D";
 const { TextArea } = Input;
 const layout = {
   labelCol: { span: 8 },
@@ -46,8 +49,8 @@ const Space = (props: any) => {
     dispatch,
   } = useContext(DefalutContext) as any;
   const [displayType, setDisplayType] = useState<DisplayType>("blog");
-  const [pictureDisplay, setPictureDisplay] = useState("basic");
   const [popVisible, setPopVisible] = useState<boolean>(false);
+  const [pictureType, setPictureType] = useState<PictureType>("normal");
   const handleVisibleChange = (visible: any) => {
     setPopVisible(visible);
   };
@@ -117,16 +120,10 @@ const Space = (props: any) => {
       a = <Diary {...childProps}></Diary>;
       break;
     case "picture":
-      a = (
-        <>
-          <div className="select-items">
-            <Select defaultValue="lucy" style={{ width: 120 }} allowClear>
-              <Option value="lucy">Lucy</Option>
-            </Select>
-          </div>
-          <Picture></Picture>
-        </>
-      );
+      if(pictureType==='normal')
+      a = <PictureBasic {...childProps}></PictureBasic>;
+      else if(pictureType==='3D')
+      a=<Picture3D {...childProps}></Picture3D>
   }
 
   return (
@@ -197,6 +194,18 @@ const Space = (props: any) => {
                 </a>
               </Tooltip>
             </div>
+          )}
+          {displayType === "picture" && (
+            <Radio.Group
+              value={pictureType}
+              style={{ marginTop: 16 }}
+              onChange={(e) => {
+                setPictureType(e.target.value);
+              }}
+            >
+              <Radio.Button value="normal">普通</Radio.Button>
+              <Radio.Button value="3D">3D</Radio.Button>
+            </Radio.Group>
           )}
         </div>
         <div className="main-body">{a}</div>

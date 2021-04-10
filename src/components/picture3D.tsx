@@ -1,7 +1,10 @@
 
 import { useState, useRef, useEffect } from 'react';
 import Layout from './layout'
-const Pictures = () => {
+interface Picture3DProps{
+    user_id:any
+}
+const Picture3D = (props:Picture3DProps) => {
     const [imgs, setImgs] = useState([{
         src: '/jay1.jpeg'
     }, {
@@ -38,4 +41,4 @@ const Pictures = () => {
     )
 }
 
-export default Pictures
+export default Picture3D

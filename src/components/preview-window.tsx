@@ -54,7 +54,7 @@ const PreviewWindow = ({ activeIdx, imgList, changeActiveIdx,play,changePlay }:P
                                 changeActiveIdx(index)
                             }}
                             key={index}
-                             className={activeIdx === index ? 'preview-item item-selected' : 'preview-item'} src={img.src} />)
+                             className={activeIdx === index ? 'preview-item item-selected' : 'preview-item'} src={`http://qiniu.crecode.cn/${img?.urlPath}`} />)
                     })}
                 </div>
             </div>
