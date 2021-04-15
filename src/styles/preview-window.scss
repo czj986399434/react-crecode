@@ -102,6 +102,16 @@ $blue:#409EFF;
         }
         
     }
+    .picture-item{
+        position: relative;
+    }
+    .delete-icon{
+         position:absolute;
+         right:0;
+         top:0;
+         color:#fff;
+         cursor: pointer;
+    }
     .preview-item{
         border-radius: 10px;
         height:60px;

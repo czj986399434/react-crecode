@@ -9,6 +9,7 @@ const Basic = (props: BasicProps) => {
   const { user_id } = props;
   const [activeIdx, setActiveIdx] = useState(0);
   const [play, setPlay] = useState(false);
+  const [refresh,setRefresh]=useState<boolean>(false)
   const [imgList, setImgList] = useState<any[]>([
   ]);
   const changeActiveIdx = (index: number) => {
@@ -40,7 +41,7 @@ const Basic = (props: BasicProps) => {
       .then((data: any) => {
         if (data.result) setImgList(data.result.list);
       });
-  }, []);
+  }, [refresh]);
   return (
     <div className="pictures-basic">
       <div className="empty-box"></div>
@@ -51,6 +52,8 @@ const Basic = (props: BasicProps) => {
         changeActiveIdx={changeActiveIdx}
         play={play}
         changePlay={changePlay}
+        setRefresh={setRefresh}
+        user_id={user_id}
       ></PreviewWindow>
       <div className="introduce"></div>
     </div>

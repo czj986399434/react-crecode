@@ -5,6 +5,7 @@ import CreativeWorkshop from "../pages/creative-workshop/index";
 import Create from "../pages/creative-workshop/create";
 import Index from "../pages/index";
 import Space from "../pages/space/index";
+import Backstage from "../pages/backstage/index";
 // export const routes = [
 //   {
 //     path: "/",
@@ -70,6 +71,9 @@ const routes = [
       {
         path:'/space',
         component:Space,
+      },{
+        path:'/admin',
+        component:Backstage
       }
     ],
   },

@@ -1,0 +1,19 @@
+.backstage{
+    box-sizing: border-box;
+    padding:100px;
+    .menu{
+        position:fixed;
+        left:0;
+        top:100px;
+        z-index: 1;
+    }
+    .backstage-container{
+        
+        margin: 0 auto;
+        
+    }
+    .avator{
+        object-fit: cover;
+        height: 70px;
+    }
+}

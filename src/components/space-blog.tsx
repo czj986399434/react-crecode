@@ -92,6 +92,7 @@ const SpaceBlog = (props: any) => {
               <div className="footer">
                 <div className="tags">
                   <Edit
+                  blog_id={blog.blog_id}
                     user_id={props.user_id}
                     toEdit={() => {
                       toEdit(blog.blog_id);

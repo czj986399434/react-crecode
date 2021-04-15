@@ -3,11 +3,13 @@ import {
   SettingOutlined,
   EditOutlined,
   DeleteOutlined,
+  UndoOutlined,
 } from "@ant-design/icons";
 import { DefalutContext } from "../../App";
-import { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { myHttp } from "../../api";
 const Edit = (props: any) => {
-  const { user_id } = props;
+  const { user_id,blog_id } = props;
   const {
     dispatch,
     defaultState: { loginUser },
@@ -31,47 +33,40 @@ const Edit = (props: any) => {
     props.toDelete();
   };
   const toEdit = () => {
-    props.toEdit();
+   myHttp.get('/blog/refresh',{
+       blog_id
+   })
   };
-  let content;
-  if (loginUser.user_id === user_id) {
-    content = (
-      <div className="edit">
-        <p
-          onClick={() => {
-            toEdit();
-          }}
-        >
-          <EditOutlined />
-          编辑
-        </p>
-        <p
-          onClick={() => {
-            toDelete();
-          }}
-        >
-          <DeleteOutlined />
-          删除
-        </p>
-      </div>
-    );
-  } else if (loginUser.type === "admin") {
-    content = (
-      <div className="edit">
-        <p>
-          <DeleteOutlined
-            onClick={() => {
-              toDelete();
-            }}
-          />
-          删除
-        </p>
-      </div>
-    );
-  }
+  const content = (
+    <div className="edit">
+      <p
+        onClick={() => {
+          toEdit();
+        }}
+      >
+        <EditOutlined />
+        编辑
+      </p>
+      <p
+        onClick={() => {
+          toEdit();
+        }}
+      >
+        <UndoOutlined />
+        刷新
+      </p>
+      <p
+        onClick={() => {
+          toDelete();
+        }}
+      >
+        <DeleteOutlined />
+        删除
+      </p>
+    </div>
+  );
   useEffect(() => {
     if (loginUser.user_id === user_id) {
-    } else if (loginUser.type === "admin") {
     } else {
       setShow(false);
     }

@@ -21,9 +21,8 @@ import '../src/styles/footer.scss'
 import 'antd/dist/antd.css'
 import { createContext, useReducer, useEffect } from 'react'
 import { reducer, defaultState, DefaultContextInterface } from './store/reducer/index'
-import { BrowserRouter, Route } from 'react-router-dom'
+import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import routes from './router-config/index'
-import { Switch } from 'antd';
 export const DefalutContext = createContext<DefaultContextInterface>(null as unknown as DefaultContextInterface);
 const storageKey = 'REACT_STATE'
 function App(props:any) {
@@ -37,9 +36,11 @@ function App(props:any) {
   return (
     <DefalutContext.Provider value={{ defaultState: state, dispatch }}>
       <BrowserRouter forceRefresh={true}>
+        <Switch>
         {routes.map((route,index) => {
           return <Route {...route} key={index}></Route>
         })}
+        </Switch>
       </BrowserRouter>
     </DefalutContext.Provider>
   );
