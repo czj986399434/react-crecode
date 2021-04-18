@@ -1,15 +1,16 @@
-import { Table, Tag, Space, Input, TablePaginationConfig } from "antd";
+import { Table, Tag, Space, Input, TablePaginationConfig, Button } from "antd";
 import style from "./index.module.scss";
 import { data } from "../../constants/backstage";
-import { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { myHttp } from "../../api";
 const { Column, ColumnGroup } = Table;
 const limit = 10;
 const BackstageUser = () => {
   const [str, setStr] = useState<string>("");
-  const [userList, setUserList] = useState<any[]>([]);
+  const [userList, setUserList] = useState([]);
   const [start, setStart] = useState<number>(1);
   const [totalCount, setTotalCount] = useState<number>(0);
+  const [activeRowKey, setActiveRowKey] = useState<string>("");
   useEffect(() => {
     if (str.indexOf("'") === -1)
       myHttp
@@ -20,7 +21,7 @@ const BackstageUser = () => {
             setTotalCount(data.result.totalCount);
           }
         });
-  }, [str,start]);
+  }, [str, start]);
   return (
     <div>
       <Input
@@ -43,11 +44,24 @@ const BackstageUser = () => {
           },
         }}
       >
+        <Column title="user_id" dataIndex="user_id" key="user_id" />
         <ColumnGroup title="Name">
           <Column title="名称" dataIndex="username" key="username" />
           <Column title="昵称" dataIndex="nickname" key="nickname" />
         </ColumnGroup>
         <Column title="座右铭" dataIndex="autograph" key="autograph" />
+        <Column
+          title="用户类型"
+          dataIndex="type"
+          key="type"
+          render={(val, record: any) => {
+            return record.key === activeRowKey ? (
+              <div></div>
+            ) : (
+              <span>{val}</span>
+            );
+          }}
+        />
         <Column
           title="头像"
           dataIndex="head_portrait"
@@ -62,22 +76,47 @@ const BackstageUser = () => {
             );
           }}
         />
-        <Column title="user_id" dataIndex="user_id" key="user_id" />
+
         <Column
           title="Action"
           key="action"
-          render={(text, record: any) => (
-            <Space size="middle">
-              <a
-                href={`/space?user_id=${record.user_id}`}
-                rel="noreferrer"
-                target="_blank"
-              >
-                进入主页
-              </a>
-              <a>封禁</a>
-            </Space>
-          )}
+          render={(text, record: any) => {
+            return record.key !== activeRowKey ? (
+              <Space size="middle">
+                <a
+                  href={`/space?user_id=${record.user_id}`}
+                  rel="noreferrer"
+                  target="_blank"
+                >
+                  进入主页
+                </a>
+                <Button
+                  onClick={() => {
+                    setActiveRowKey(record.key);
+                  }}
+                >
+                  设置
+                </Button>
+              </Space>
+            ) : (
+              <Space size="middle">
+                <a
+                  href={`/space?user_id=${record.user_id}`}
+                  rel="noreferrer"
+                  target="_blank"
+                >
+                  进入主页
+                </a>
+                <Button
+                  onClick={() => {
+                    setActiveRowKey("");
+                  }}
+                >
+                  返回
+                </Button>
+              </Space>
+            );
+          }}
         />
       </Table>
     </div>
