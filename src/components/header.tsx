@@ -1,41 +1,75 @@
 import { labelRouters } from "../constants/header";
 import { DefalutContext } from "../App";
-import React, { useState, useEffect, useMemo, useContext } from "react";
+import React, { useState, useEffect, useMemo, useContext, useRef } from "react";
 import { changeRouter, receiveUser, requestUser } from "../store/action/index";
 import { useAdapt } from "../utils/adapt-hooks";
-import { Drawer, Dropdown, Menu } from "antd";
+import { Button, Drawer, Dropdown, Menu, message, notification } from "antd";
 import "../mock/login";
 import { Link, useHistory } from "react-router-dom";
 import { Axios, myHttp } from "../api";
 import { sleep } from "../utils";
 import { CrecodeSearch } from "./common/crecode-search";
 import BubbleBox from "./common/bubble-box";
+import { NotificationApi } from "antd/lib/notification";
 const { SubMenu } = Menu;
 const Header = (props: any) => {
   const history = useHistory();
   const [bodyWidth] = useAdapt();
-  const { dispatch, defaultState } = useContext(DefalutContext) ;
+  const { dispatch, defaultState } = useContext(DefalutContext);
   const { router_index, loginUser, isLogin } = defaultState;
   const [idx, setIdx] = useState<number>(-1);
   const [menuCurrent, setMenuCurrent] = useState<string>("主页");
   const [menuVisible, setMenuVisible] = useState<boolean>(false);
   const [menuClass, setMenuClass] = useState<string>("menu");
-  const [messageDrawerVisible,setMessageDrawerVisible]=useState<boolean>(false)
-  const [messageList,setMessageList]=useState<any[]>([])
-  const [refreshFlag,setRefreshFlag]=useState<boolean>(false)
+  const [messageDrawerVisible, setMessageDrawerVisible] = useState<boolean>(
+    false
+  );
+  const [messageList, setMessageList] = useState<any[]>([]);
+  const [refreshFlag, setRefreshFlag] = useState<boolean>(false);
   // const router = useRouter()
   useEffect(() => {
-    myHttp.get('/message/get',{user_id:loginUser.user_id}).then((data:any)=>{
-      const {result} =data
-      setMessageList(result?.list)
-    })
-    
+    myHttp
+      .get("/message/get", { user_id: loginUser.user_id })
+      .then((data: any) => {
+        const { result } = data;
+        setMessageList(result?.list);
+      });
   }, [refreshFlag]);
-  const refresh=()=>{
-    setRefreshFlag((flag)=>{
-      return !flag
-    })
-  }
+  useEffect(() => {
+    if (messageList.length !== 0) {
+      console.log(messageList);
+      let index = 0;
+      const timer = setInterval(() => {
+        if (messageList[index].read === 0) {
+          const message_id = messageList[index].message_id;
+          const type=messageList[index].type
+          //@ts-ignore
+          notification[type]({
+            duration: null,
+            message: "",
+            description: messageList[index].content,
+            onClose: () => {
+              myHttp
+                .post("/message/update", {
+                  message_id: message_id,
+                  read: 1,
+                })
+                .then(() => {
+                  refresh();
+                });
+            },
+          });
+        }
+        index++;
+        if (index === messageList.length) clearInterval(timer);
+      }, 1000);
+    }
+  }, []);
+  const refresh = () => {
+    setRefreshFlag((flag) => {
+      return !flag;
+    });
+  };
   const menuClick = (e: any) => {
     setMenuCurrent(e.key);
   };
@@ -56,39 +90,43 @@ const Header = (props: any) => {
       dispatch(receiveUser(data.result));
     });
   };
-  const closeDrawer=()=>{
-      setMessageDrawerVisible(false)
-  }
+  const closeDrawer = () => {
+    setMessageDrawerVisible(false);
+  };
+  const messageAllRead = () => {
+    myHttp
+      .post("/message/batch", { user_id: loginUser.user_id, type: "allRead" })
+      .then(() => {
+        refresh();
+      });
+  };
+  const messageAllDelete = () => {
+    myHttp
+      .post("/message/batch", { user_id: loginUser.user_id, type: "allDelete" })
+      .then(() => {
+        refresh();
+      });
+  };
   const loginMenu = useMemo(
     () => (
       <Menu>
         {loginUser.type === "admin" && (
           <Menu.Item>
-            <a
-              target="_blank"
-              rel="noopener noreferrer"
-              href="/admin"
-            >
+            <a target="_blank" rel="noopener noreferrer" href="/admin">
               进入后台
             </a>
           </Menu.Item>
         )}
 
-        <Menu.Item onClick={()=>{
-              setMessageDrawerVisible(true)
-            }}>
-          <span
-            
-          >
-            消息通知
-          </span>
+        <Menu.Item
+          onClick={() => {
+            setMessageDrawerVisible(true);
+          }}
+        >
+          <span>消息通知</span>
         </Menu.Item>
         <Menu.Item>
-          <span
-            
-          >
-            3rd menu item
-          </span>
+          <span>3rd menu item</span>
         </Menu.Item>
         <Menu.Item danger>注销</Menu.Item>
       </Menu>
@@ -227,19 +265,49 @@ const Header = (props: any) => {
       )}
       <CrecodeSearch></CrecodeSearch>
       <Drawer
-      className='message'
-       width={600}
-          title="消息通知"
-          placement={'right'}
-          closable={true}
-          onClose={closeDrawer}
-          visible={messageDrawerVisible}
-          
-        >
-          {messageList.map((message:any)=>{
-            return (<BubbleBox message={message} refresh={refresh}></BubbleBox>)
-          })}
-        </Drawer>
+        className="message"
+        width={600}
+        title={
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <Button
+              type="primary"
+              ghost
+              style={{ border: 0, color: "#98E165" }}
+              onClick={messageAllRead}
+            >
+              全部已读
+            </Button>
+            <Button
+              type="primary"
+              ghost
+              style={{ border: 0 }}
+              onClick={messageAllDelete}
+            >
+              清空
+            </Button>
+          </div>
+        }
+        placement={"right"}
+        closable={false}
+        onClose={closeDrawer}
+        visible={messageDrawerVisible}
+      >
+        {messageList.map((message: any) => {
+          return (
+            <BubbleBox
+              message={message}
+              key={message.message_id}
+              refresh={refresh}
+            ></BubbleBox>
+          );
+        })}
+      </Drawer>
     </div>
   );
 };

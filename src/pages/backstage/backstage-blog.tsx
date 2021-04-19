@@ -69,7 +69,7 @@ const BackstageBlog = () => {
           dataIndex="tags"
           render={(tags: any[]) => (
             <>
-              {tags.map((tag) => {
+              {tags.map((tag,index) => {
                 let color = "#87d068";
                 const idx = defaultTags.findIndex((obj) => {
                   return obj.name === tag.name;
@@ -77,6 +77,7 @@ const BackstageBlog = () => {
                 if (idx !== -1) color = defaultTags[idx].color;
                 return (
                   <Tag
+                  key={index}
                     color={color}
                     style={{
                       margin: "5px",

@@ -68,7 +68,7 @@ const IndexPage = () => {
             }}
           >
             {secondCardContent.split("").map((word: any, index) => {
-              return <Word index={index} word={word}></Word>;
+              return <Word index={index} word={word} key={index}></Word>;
             })}
             
           </div>
