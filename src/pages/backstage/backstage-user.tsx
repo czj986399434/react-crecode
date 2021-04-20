@@ -38,6 +38,7 @@ const BackstageUser = () => {
       })
       .then(() => {
         initialForm();
+        setIsModalVisible(false)
       });
   };
   const initialForm = () => {
@@ -129,7 +130,9 @@ const BackstageUser = () => {
           }}
         />
       </Table>
-      <Modal title="Basic Modal" visible={isModalVisible} onOk={notify}>
+      <Modal title="Basic Modal" visible={isModalVisible} onOk={notify} onCancel={()=>{
+        setIsModalVisible(false)
+      }}>
         <Row gutter={[16, 16]}>
           <Col span={6}>类型</Col>
           <Col span={18}>
