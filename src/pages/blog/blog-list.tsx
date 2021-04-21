@@ -16,6 +16,7 @@ import {
 import { binarySearch } from "../../utils/binary-search";
 import { endLoading, startLoading } from "../../store/action/loading";
 import { getSelfLikes } from "../../store/action/like";
+import { useAdapt } from "../../utils/adapt-hooks";
 type SelectType = "hotest" | "latest";
 interface ContentItem {
   blog_id: number;
@@ -55,6 +56,7 @@ const BlogList = () => {
   const testContext = useContext(DefalutContext) as any;
   const { defaultState, dispatch } = testContext;
   const { loginUser, isLogin } = defaultState;
+  const [bodyWidth]=useAdapt()
   const { likes } = loginUser;
   const history = useHistory();
   useEffect(() => {
@@ -214,8 +216,7 @@ const BlogList = () => {
             showTotal={(total) => `共${total}个`}
             onShowSizeChange={changeSize}
           />
-        </div>
-        <div className="sider ">
+        </div>{bodyWidth>=800&&<div className="sider ">
           {Object.keys(loginUser).length === 0 ? (
             <div></div>
           ) : (
@@ -243,8 +244,8 @@ const BlogList = () => {
             <p className="">活跃用户</p>
             <div></div>
           </div>
-        </div>
-        <div></div>
+        </div>}
+        
       </div>
     </Layout>
   );

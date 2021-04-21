@@ -3,6 +3,7 @@ $grey: #909090;
 $blue: #409eff;
 
 .diary {
+  
   ul {
     background-attachment: fixed !important;
     background: url("../../public/backg.jpg") no-repeat;
@@ -19,6 +20,11 @@ $blue: #409eff;
     left: 0;
     background: url("../../public/backg.jpg") no-repeat;
     background-size: 100% 100%;
+  }
+  .phone-ul{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
   li {
     position: relative;
@@ -53,7 +59,18 @@ $blue: #409eff;
     left: var(--left);
     transform: translateX(-50%);
   }
-
+  @media screen and (max-width: 1000px) {
+    li::before {
+      content: "";
+      width: 0px;
+      height: 0px ;
+    }
+    li::after {
+      content: "";
+      width: 0px ;
+      height: 0px ;
+    }
+  }
   .card {
     position: relative;
     background-color: #ffffff;
@@ -151,7 +168,7 @@ $blue: #409eff;
     font-weight: normal;
     letter-spacing: 0.1em;
   }
-
+  
   .card > .borderRadius2 {
     font-size: 14px;
     // background: #409eff;

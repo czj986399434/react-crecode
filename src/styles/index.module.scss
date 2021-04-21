@@ -50,10 +50,11 @@
   align-items: center;
   justify-content: center;
   background: #fff;
+  width: 100vw;
 }
 .middle {
-  display: inline-flex;
-
+  display: flex;
+  width: 100vw;
   align-items: center;
   justify-content: center;
 }

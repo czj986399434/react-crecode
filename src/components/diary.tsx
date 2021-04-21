@@ -15,6 +15,7 @@ import { Mask } from "./common/mask";
 import Modal from "antd/lib/modal/Modal";
 import { DefalutContext } from "../App";
 import { endLoading, startLoading } from "../store/action/loading";
+import { useAdapt } from "../utils/adapt-hooks";
 interface CardProps {
   card: any;
   user_id: number;
@@ -50,6 +51,7 @@ const Card = ({ card, user_id, refresh }: CardProps) => {
   const [moodEditVisible, setMoodEditVisible] = useState<boolean>(false);
   const [commentsVisible, setCommentsVisible] = useState<boolean>(false);
   const [contentVisible, setContentVisible] = useState<boolean>(false);
+  const [bodyWidth]=useAdapt()
   const [readClass, setReadClass] = useState<string>(
     "read-more opacity-appear"
   );
@@ -128,6 +130,13 @@ const Card = ({ card, user_id, refresh }: CardProps) => {
       refresh();
     })
   }
+  useEffect(() => {
+    if(bodyWidth<1000 &&bodyWidth!==0){
+      setReadButtonVisible(true)
+      setLineVisible(true);
+      
+    }
+  }, [bodyWidth]);
   useEffect(() => {
     setTimeout(() => {
       setReadClass("read-more rotate-y");
@@ -345,6 +354,7 @@ interface DiaryProps {
 const Diary = (props: DiaryProps) => {
   const { user_id } = props;
   const [cards, setCards] = useState<any>([]);
+  const [bodyWidth]=useAdapt()
   const [refreshFlag, setRefreshFlag] = useState<boolean>(false);
   const {
     dispatch,
@@ -384,42 +394,51 @@ const Diary = (props: DiaryProps) => {
     );
   }, [cards.length]);
   return (
-    <div className="diary">
-      <ul>
-        {cards.map((card: any, index: number) => {
-          const Blank = (
-            <div
-              // className={
-              //   showStoreList[index]
-              //     ? "content content-more"
-              //     : "content content-hidden"
-              // }
-              className="empty-content"
-              onClick={() => {
-                let list = showStoreList.map((item: boolean, idx: number) => {
-                  return index === idx ? !item : item;
-                });
-                setShowStoreList([...list]);
-              }}
-            ></div>
+    <div className="diary">{
+      bodyWidth>=1000? <ul>
+      {cards.map((card: any, index: number) => {
+        const Blank = (
+          <div
+            // className={
+            //   showStoreList[index]
+            //     ? "content content-more"
+            //     : "content content-hidden"
+            // }
+            className="empty-content"
+            onClick={() => {
+              let list = showStoreList.map((item: boolean, idx: number) => {
+                return index === idx ? !item : item;
+              });
+              setShowStoreList([...list]);
+            }}
+          ></div>
+        );
+        if (index % 2 === 0) {
+          return (
+            <li key={card.diary_id}>
+              <Card card={card} user_id={user_id} refresh={refresh}></Card>
+              {Blank}
+            </li>
           );
-          if (index % 2 === 0) {
-            return (
-              <li key={card.diary_id}>
-                <Card card={card} user_id={user_id} refresh={refresh}></Card>
-                {Blank}
-              </li>
-            );
-          } else {
-            return (
-              <li key={card.diary_id}>
-                {Blank}
-                <Card card={card} user_id={user_id} refresh={refresh}></Card>;
-              </li>
-            );
-          }
-        })}
-      </ul>
+        } else {
+          return (
+            <li key={card.diary_id}>
+              {Blank}
+              <Card card={card} user_id={user_id} refresh={refresh}></Card>;
+            </li>
+          );
+        }
+      })}
+    </ul>:(<ul className='phone-ul'>
+    {cards.map((card: any, index: number) => {
+      
+          return (
+              <Card card={card} user_id={user_id} key={card.diary_id} refresh={refresh}></Card>
+          );
+      })}
+    </ul>)
+    }
+     
     </div>
   );
 };
